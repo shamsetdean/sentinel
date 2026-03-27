@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!--
+  © 2026 Shams Guettaf. Tous droits réservés.
+  Usage interdit sans autorisation écrite.
+  Contact : shamsetdean@gmail.com
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="SENTINEL — Documentation">
+<title>Documentation — SENTINEL {{VER}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+:root{
+  --navy:#0a111f;--navy2:#111827;--navy3:#1a2535;--navy4:#1e2d42;
+  --blue:#2563eb;--blue2:#3b82f6;--blue3:#60a5fa;--blue4:#93c5fd;
+  --green:#22c55e;--orange:#f97316;--red:#ef4444;--yellow:#eab308;
+  --text:#f1f5f9;--muted:#64748b;--light:#94a3b8;--dim:#475569;
+  --border:rgba(255,255,255,.06);--card:rgba(255,255,255,.03);
+  --card2:rgba(255,255,255,.05);
+  --r:12px;--r2:16px;
+  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
+a{color:var(--blue3);text-decoration:none}
+a:hover{color:var(--blue4)}
+img{max-width:100%;display:block}
+
+/* Fond grain subtil */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity:.5}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:200;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(16px,4vw,60px);
+  background:rgba(10,17,31,.9);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);}
+.nav-left{display:flex;align-items:center;gap:14px}
+.nav-logo{width:32px;height:32px;border-radius:9px;background:var(--blue);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo svg{stroke:#fff;stroke-width:2;fill:none}
+.nav-brand{font-size:16px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
+.nav-ver{font-size:11px;font-family:var(--mono);color:var(--blue3);
+  background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);
+  padding:2px 8px;border-radius:99px;letter-spacing:.5px}
+.nav-links{display:flex;gap:6px}
+.nav-link{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;
+  color:var(--light);transition:all .18s;cursor:pointer}
+.nav-link:hover{color:var(--text);background:var(--card2)}
+.nav-link.active{color:var(--text);background:var(--card2)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.nav-social{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--light);transition:all .18s}
+.nav-social:hover{border-color:rgba(255,255,255,.15);color:var(--text);background:var(--card2)}
+.nav-social svg{stroke:currentColor;fill:none;width:16px;height:16px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;
+  border-radius:9px;font-size:13.5px;font-weight:600;font-family:var(--font);
+  cursor:pointer;border:none;transition:all .2s;line-height:1}
+.btn svg{stroke:currentColor;fill:none;width:15px;height:15px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 4px 20px rgba(37,99,235,.35)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--light)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.15);color:var(--text)}
+.btn-sm{padding:6px 14px;font-size:12.5px}
+
+/* ── VERSION BADGE ── */
+.ver-badge{display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:99px;font-size:11.5px;font-weight:600;
+  font-family:var(--mono);letter-spacing:.5px;
+  background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:var(--blue3)}
+.ver-badge svg{stroke:var(--blue3);fill:none;width:12px;height:12px;stroke-width:2}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:28px;
+  transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(255,255,255,.1)}
+.card-hover:hover{transform:translateY(-2px);border-color:rgba(37,99,235,.25)}
+
+/* ── DIVIDER ── */
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--border);padding:40px clamp(16px,4vw,60px) 28px;margin-top:80px}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px}
+.footer-brand p{font-size:13px;color:var(--muted);line-height:1.7;margin-top:12px;max-width:280px}
+.footer-col h5{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;
+  color:var(--muted);margin-bottom:14px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.footer-col ul li a{font-size:13px;color:var(--light);transition:color .18s}
+.footer-col ul li a:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:11.5px;color:var(--muted)}
+.footer-legal{display:flex;gap:20px}
+.footer-legal a{font-size:11.5px;color:var(--muted);transition:color .18s}
+.footer-legal a:hover{color:var(--light)}
+
+/* ── ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.in{opacity:1;transform:none}
+.stagger > *{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.stagger.in > *:nth-child(1){opacity:1;transform:none;transition-delay:.04s}
+.stagger.in > *:nth-child(2){opacity:1;transform:none;transition-delay:.12s}
+.stagger.in > *:nth-child(3){opacity:1;transform:none;transition-delay:.2s}
+.stagger.in > *:nth-child(4){opacity:1;transform:none;transition-delay:.28s}
+.stagger.in > *:nth-child(5){opacity:1;transform:none;transition-delay:.36s}
+.stagger.in > *:nth-child(6){opacity:1;transform:none;transition-delay:.44s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .nav-links{display:none}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+}
+
+.pg{padding:60px clamp(16px,4vw,60px) 80px;max-width:860px;margin:0 auto}
+.pg-title{font-size:clamp(30px,4vw,48px);font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+.pg-sub{font-size:16px;color:var(--light);margin-bottom:40px;line-height:1.6}
+.pg h2{font-size:20px;font-weight:700;margin:36px 0 12px;padding-top:36px;border-top:1px solid var(--border)}
+.pg h2:first-of-type{border-top:none;padding-top:0}
+.pg h3{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--blue3)}
+.pg p{font-size:14px;color:var(--light);line-height:1.8;margin-bottom:12px}
+.pg ul{margin:10px 0 14px 20px;display:flex;flex-direction:column;gap:6px}
+.pg ul li{font-size:14px;color:var(--light);line-height:1.6}
+.pg code{font-family:var(--mono);font-size:12.5px;background:rgba(255,255,255,.06);
+  padding:2px 7px;border-radius:5px;color:var(--blue4)}
+.pg pre{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px 20px;margin:16px 0;overflow-x:auto}
+.pg pre code{background:none;padding:0;color:var(--text);font-size:12.5px;line-height:1.7}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;
+  font-size:11.5px;font-weight:600}
+.tag-ok{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2)}
+.tag-info{background:rgba(37,99,235,.1);color:var(--blue3);border:1px solid rgba(37,99,235,.2)}
+.tag-warn{background:rgba(234,179,8,.1);color:#facc15;border:1px solid rgba(234,179,8,.2)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+th{text-align:left;padding:10px 14px;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;color:var(--muted);
+  border-bottom:2px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--light);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.notice{background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.15);
+  border-radius:var(--r);padding:16px 20px;margin:20px 0;font-size:13.5px;color:var(--light);line-height:1.7}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </a>
+    <a href="index.html" class="nav-brand">SENTINEL</a>
+    <span class="nav-ver" data-ver>v3.27</span>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link" data-page="index.html">Accueil</a>
+    <a href="docs.html" class="nav-link" data-page="docs.html">Documentation</a>
+    <a href="versions.html" class="nav-link" data-page="versions.html">Versions</a>
+    <a href="legal.html" class="nav-link" data-page="legal.html">Mentions légales</a>
+    <a href="license.html" class="nav-link" data-page="license.html">Licence</a>
+  </div>
+  <div class="nav-right">
+    <a href="https://www.linkedin.com/in/shamsguettaf/" class="nav-social" target="_blank" rel="noopener" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="https://x.com/shamsetdean" class="nav-social" target="_blank" rel="noopener" title="X / Twitter">
+      <svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke-width="2"/></svg>
+    </a>
+    <a href="https://abstracted-crush-f4e.notion.site/SHAMS-DEAN-286d3f1e5597815f9fdfc90d48445621" class="nav-social" target="_blank" rel="noopener" title="Notion">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+    </a>
+    <a href="versions.html" class="btn btn-primary btn-sm">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Télécharger
+    </a>
+  </div>
+</nav>
+
+<main>
+<div class="pg">
+  <div class="ver-badge fade-up" style="margin-bottom:20px">
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    Documentation — Version <span data-ver>v3.27</span>
+  </div>
+  <h1 class="pg-title fade-up">Documentation</h1>
+  <p class="pg-sub fade-up">Guide complet d'installation et d'utilisation de SENTINEL.</p>
+
+  <div class="fade-up">
+  <h2>Installation</h2>
+  <h3>macOS Intel (x86_64)</h3>
+  <p>Mac Intel — modèles 2017 à 2020. Requiert Python 3.9+ et macOS Ventura 13+ recommandé.</p>
+  <pre><code># 1. Télécharger SENTINEL_Intel.zip
+# 2. Ouvrir le guide install_guide.html
+# 3. Contourner Gatekeeper (clic droit → Ouvrir)
+# 4. Double-cliquer sur Sentinel.app</code></pre>
+
+  <h3>macOS Apple Silicon (arm64)</h3>
+  <p>Puce Apple M1, M2, M3, M4 — 2020 et après. Launcher zsh avec PATH Homebrew ARM.</p>
+  <pre><code># Même procédure que Intel
+# Le launcher détecte automatiquement l'architecture</code></pre>
+
+  <h3>Windows 10 / 11</h3>
+  <p>Requiert Python 3.9+ avec "Add Python to PATH" coché lors de l'installation.</p>
+  <pre><code># 1. Installer Python : python.org/downloads
+#    Cocher impérativement "Add Python to PATH"
+# 2. Extraire SENTINEL_Windows.zip
+# 3. Double-cliquer sur SENTINEL.bat</code></pre>
+
+  <h3>Linux — Ubuntu / Debian / Fedora</h3>
+  <pre><code># Ubuntu/Debian
+sudo apt install python3 lsblk smartmontools lm-sensors
+
+# Fedora
+sudo dnf install python3 util-linux smartmontools lm_sensors
+
+# Lancer SENTINEL
+chmod +x sentinel.sh
+./sentinel.sh</code></pre>
+
+  <h2>Fonctionnement</h2>
+  <p>SENTINEL collecte les informations système via les commandes natives de chaque OS, génère un rapport HTML et l'ouvre dans le navigateur. L'analyse dure entre 30 et 90 secondes.</p>
+
+  <table>
+    <thead><tr><th>Module</th><th>macOS</th><th>Windows</th><th>Linux</th></tr></thead>
+    <tbody>
+      <tr><td>CPU / RAM</td><td>system_profiler, powermetrics</td><td>WMI / PowerShell</td><td>/proc/cpuinfo, /proc/meminfo</td></tr>
+      <tr><td>Stockage</td><td>diskutil, smartctl</td><td>Get-PhysicalDisk</td><td>lsblk, df, smartctl</td></tr>
+      <tr><td>Batterie</td><td>ioreg, pmset</td><td>Win32_Battery, powercfg</td><td>/sys/class/power_supply</td></tr>
+      <tr><td>Sécurité</td><td>Gatekeeper, SIP, FileVault</td><td>Defender, BitLocker, UAC</td><td>UFW, LUKS, AppArmor</td></tr>
+      <tr><td>Réseau</td><td>airport, networksetup</td><td>netsh, Get-NetTCPConnection</td><td>nmcli, ip, ss</td></tr>
+      <tr><td>Doublons</td><td>Hash MD5 Python</td><td>Hash MD5 Python</td><td>Hash MD5 Python</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Modes d'affichage</h2>
+  <h3>Mode Simple</h3>
+  <p>Conçu pour les utilisateurs non-techniques. Chaque information est résumée en une carte avec un verdict coloré (vert / orange / rouge) et une action corrective si nécessaire.</p>
+  <h3>Mode Expert</h3>
+  <p>Toutes les métriques techniques : températures, tensions, IOPS, SMART, logs de démarrage, connexions réseau actives, permissions par application.</p>
+
+  <h2>Confidentialité</h2>
+  <div class="notice">SENTINEL ne contacte aucun serveur externe. Toutes les analyses sont locales. Le rapport HTML reste sur votre machine. Votre mot de passe n'est jamais stocké sur disque.</div>
+
+  <h2>Version automatique</h2>
+  <p>La version de SENTINEL suit le format <code>M.J</code> (mois.jour). La version actuelle est <code data-ver>v3.27</code>. Elle se met à jour automatiquement à chaque chargement de page.</p>
+  </div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;border-radius:7px;background:#2563eb;display:flex;align-items:center;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span style="font-size:15px;font-weight:800">SENTINEL</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--blue3);background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);padding:2px 8px;border-radius:99px" data-ver>v3.27</span>
+        </div>
+        <p>Diagnostic système multi-plateforme. Rapport HTML 100% local. Modes Simple et Expert.</p>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <a href="https://www.linkedin.com/in/shamsguettaf/" class="nav-social" target="_blank" title="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://x.com/shamsetdean" class="nav-social" target="_blank" title="X">
+            <svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke-width="2"/></svg>
+          </a>
+          <a href="https://abstracted-crush-f4e.notion.site/SHAMS-DEAN-286d3f1e5597815f9fdfc90d48445621" class="nav-social" target="_blank" title="Notion">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="docs.html">Documentation</a></li>
+          <li><a href="versions.html">Versions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <ul>
+          <li><a href="legal.html">Mentions légales</a></li>
+          <li><a href="license.html">Licence</a></li>
+          <li><a href="legal.html#privacy">Confidentialité</a></li>
+          <li><a href="legal.html#cgu">CGU</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Liens</h5>
+        <ul>
+          <li><a href="https://github.com/shamsetdean/sentinel" target="_blank">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/shamsguettaf/" target="_blank">LinkedIn</a></li>
+          <li><a href="https://x.com/shamsetdean" target="_blank">X / Twitter</a></li>
+          <li><a href="https://abstracted-crush-f4e.notion.site/SHAMS-DEAN-286d3f1e5597815f9fdfc90d48445621" target="_blank">Notion</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 SHAMS&amp;DEAN — Tous droits réservés. Version <span data-ver-raw>3.27</span></span>
+      <div class="footer-legal">
+        <a href="legal.html">Mentions légales</a>
+        <a href="license.html">Licence</a>
+        <a href="legal.html#privacy">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<div id="lb" onclick="closeLB()" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);align-items:center;justify-content:center;cursor:pointer">
+  <img id="lb-img" src="" alt="" style="max-width:92vw;max-height:90vh;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+  <button onclick="closeLB()" style="position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer;display:flex;align-items:center;justify-content:center">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+<script>
+// Version auto M.J
+(function(){
+  var d=new Date();
+  var v=d.getMonth()+1+'.'+d.getDate();
+  document.querySelectorAll('[data-ver]').forEach(function(el){el.textContent='v'+v});
+  document.querySelectorAll('[data-ver-raw]').forEach(function(el){el.textContent=v});
+  document.title=document.title.replace('{VER}',v);
+})();
+
+// Scroll reveal
+(function(){
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in')}});
+  },{threshold:0.1});
+  document.querySelectorAll('.fade-up,.stagger').forEach(function(el){io.observe(el)});
+})();
+
+// Active nav link
+(function(){
+  var path=window.location.pathname.split('/').pop()||'index.html';
+  document.querySelectorAll('.nav-link[data-page]').forEach(function(el){
+    if(el.dataset.page===path)el.classList.add('active');
+  });
+})();
+
+// Lightbox
+function openLB(src){
+  var lb=document.getElementById('lb');
+  var img=document.getElementById('lb-img');
+  if(!lb||!img)return;
+  img.src=src;lb.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeLB(){
+  var lb=document.getElementById('lb');
+  if(lb)lb.style.display='none';
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLB()});
+</script>
+</body>
+</html>
