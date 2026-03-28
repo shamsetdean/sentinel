@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<!--
+  © 2026 Shams Guettaf. Tous droits réservés.
+  Contact : shamsetdean@gmail.com
+  GitHub  : https://github.com/shamsetdean/sentinel
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="SENTINEL — Diagnostic système macOS, Windows et Linux. Rapport HTML 100% local, aucune donnée transmise.">
+<meta name="author" content="Shams Guettaf — SHAMS&DEAN">
+<title>SENTINEL — protect · clean · control</title>
+<!--
+  Polices libres de droits — usage commercial autorisé (SIL OFL 1.1)
+  Bricolage Grotesque : https://fonts.google.com/specimen/Bricolage+Grotesque — Mathieu Triay
+  DM Sans            : https://fonts.google.com/specimen/DM+Sans — Colophon Foundry
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   SENTINEL — One Page Premium
+   © 2026 Shams Guettaf. Tous droits réservés.
+   Polices : Bricolage Grotesque + DM Sans (SIL OFL 1.1)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Tokens design ──────────────────────────────────────────── */
+:root {
+  --bg:     #080808;
+  --bg1:    #0f0f0f;
+  --bg2:    #161616;
+  --bg3:    #1e1e1e;
+  --bg4:    #252525;
+
+  --text:   #f0efea;
+  --text2:  #a8a49c;
+  --text3:  #5c5853;
+
+  --accent: #2563eb;
+  --accent2:#1d4ed8;
+  --alight: rgba(37,99,235,.12);
+  --abord:  rgba(37,99,235,.22);
+
+  --green:  #22c55e;
+  --orange: #f59e0b;
+  --red:    #ef4444;
+
+  --bord:   rgba(255,255,255,.07);
+  --bord2:  rgba(255,255,255,.11);
+
+  --sh1: 0 1px 3px rgba(0,0,0,.4);
+  --sh2: 0 4px 20px rgba(0,0,0,.5);
+  --sh3: 0 12px 40px rgba(0,0,0,.6);
+
+  --r1: 10px;
+  --r2: 16px;
+  --r3: 22px;
+
+  --disp: 'Bricolage Grotesque', sans-serif;
+  --body: 'DM Sans', sans-serif;
+  --mono: 'Courier New', monospace;
+
+  --nav-h: 62px;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+body {
+  font-family: var(--body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+a { color: var(--text); text-decoration: none; cursor: none; }
+button { font-family: var(--body); cursor: none; border: none; background: none; }
+
+/* Grain atmosphère */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+  opacity:.6;
+}
+
+/* ── Curseur ────────────────────────────────────────────────── */
+#cd {
+  position: fixed; width: 8px; height: 8px; border-radius: 50%;
+  background: #fff; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .18s, height .18s, background .22s, transform .08s;
+}
+#cr {
+  position: fixed; width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.3);
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%); opacity: .6;
+  transition: width .2s, height .2s, border-color .22s, opacity .2s, background .2s;
+}
+body.ch #cd { width: 12px; height: 12px; background: var(--accent); }
+body.ch #cr { width: 52px; height: 52px; border-color: var(--accent); opacity: .2; background: var(--alight); }
+body.cc #cd { transform: translate(-50%,-50%) scale(.45); }
+
+/* ── NAV ────────────────────────────────────────────────────── */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(20px,5vw,72px);
+  background: rgba(8,8,8,.85);
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border-bottom: 1px solid var(--bord);
+}
+.nav-brand { display: flex; align-items: center; gap: 11px; }
+.nav-logo {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  transition: transform .22s;
+  flex-shrink: 0;
+}
+.nav-logo:hover { transform: scale(1.06) rotate(-7deg); }
+.nav-logo svg { stroke: #fff; fill: none; width: 15px; height: 15px; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.nav-name { font-family: var(--disp); font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.nav-v {
+  font-family: var(--mono); font-size: 11px; padding: 2px 9px; border-radius: 99px;
+  background: var(--bg3); border: 1px solid var(--bord2); color: var(--text3); letter-spacing: .4px;
+}
+.nav-links { display: flex; gap: 2px; }
+.nav-a {
+  padding: 6px 13px; border-radius: 8px; font-size: 13.5px; font-weight: 400;
+  color: var(--text3); transition: all .16s;
+}
+.nav-a:hover { color: var(--text); background: var(--bg3); }
+.nav-a.act   { color: var(--text); font-weight: 500; }
+.nav-actions { display: flex; gap: 8px; align-items: center; }
+.btn-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 20px; border-radius: 9px;
+  font-size: 13.5px; font-weight: 600; color: #fff;
+  background: var(--accent); transition: all .2s;
+}
+.btn-cta:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(37,99,235,.4); }
+.btn-cta svg { stroke: #fff; fill: none; width: 14px; height: 14px; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 20px; border-radius: 9px;
+  font-size: 13.5px; font-weight: 500; color: var(--text2);
+  border: 1px solid var(--bord2); transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--bord2); color: var(--text); background: var(--bg3); }
+.btn-ghost svg { stroke: currentColor; fill: none; width: 14px; height: 14px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Utilitaires layout ─────────────────────────────────────── */
+.section { padding: clamp(80px,10vh,130px) clamp(20px,5vw,80px); }
+.container { max-width: 1180px; margin: 0 auto; }
+.section-tag {
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 1.8px; color: var(--text3);
+  margin-bottom: 14px;
+}
+.section-title {
+  font-family: var(--disp);
+  font-size: clamp(28px,3.8vw,44px);
+  font-weight: 800; letter-spacing: -.03em;
+  line-height: 1.1; margin-bottom: 14px;
+}
+.section-sub { font-size: 16px; color: var(--text2); line-height: 1.72; max-width: 520px; }
+
+/* Reveal animations */
+.rv { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.rv.in { opacity: 1; transform: none; }
+.cs > * { opacity: 0; transform: translateY(15px); transition: opacity .5s ease, transform .5s ease; }
+.cs.in > *:nth-child(1){opacity:1;transform:none;transition-delay:.04s}
+.cs.in > *:nth-child(2){opacity:1;transform:none;transition-delay:.11s}
+.cs.in > *:nth-child(3){opacity:1;transform:none;transition-delay:.18s}
+.cs.in > *:nth-child(4){opacity:1;transform:none;transition-delay:.25s}
+.cs.in > *:nth-child(5){opacity:1;transform:none;transition-delay:.32s}
+.cs.in > *:nth-child(6){opacity:1;transform:none;transition-delay:.39s}
+
+/* ═══════════════════════════════════════════════════════════════
+   1. HERO
+   ═══════════════════════════════════════════════════════════════ */
+#hero {
+  padding: clamp(100px,14vh,160px) clamp(20px,5vw,80px) clamp(80px,10vh,120px);
+  position: relative; overflow: hidden;
+}
+/* Glow de fond */
+#hero::before {
+  content: '';
+  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 600px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(37,99,235,.14) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 13px; border-radius: 99px; margin-bottom: 28px;
+  background: var(--alight); border: 1px solid var(--abord);
+  font-family: var(--mono); font-size: 12px; color: rgba(37,99,235,.9); letter-spacing: .5px;
+}
+.hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.6)} }
+
+.hero h1 {
+  font-family: var(--disp);
+  font-size: clamp(46px,7.5vw,96px);
+  font-weight: 800; line-height: 1.0; letter-spacing: -.045em;
+  max-width: 860px; margin-bottom: 22px;
+}
+.hero h1 .accent-word {
+  background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 60%, var(--accent) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: grad 5s linear infinite;
+}
+@keyframes grad { to { background-position: 200% center; } }
+
+.hero-sub {
+  font-size: clamp(16px,1.9vw,20px); color: var(--text2);
+  max-width: 560px; line-height: 1.72; font-weight: 300; margin-bottom: 40px;
+}
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 52px; }
+.hero-ctas .btn-cta  { padding: 13px 28px; font-size: 15px; font-weight: 700; }
+.hero-ctas .btn-ghost{ padding: 13px 28px; font-size: 15px; }
+
+/* Chips plateformes */
+.plat-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.plat-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 99px;
+  background: var(--bg2); border: 1px solid var(--bord2);
+  font-size: 12.5px; font-weight: 400; color: var(--text2);
+  transition: all .18s;
+}
+.plat-chip:hover { border-color: var(--accent); color: var(--text); }
+.plat-chip svg { stroke: var(--accent); fill: none; width: 12px; height: 12px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ═══════════════════════════════════════════════════════════════
+   2. APERÇU RAPPORT (Dashboard preview)
+   ═══════════════════════════════════════════════════════════════ */
+#preview { background: var(--bg1); border-top: 1px solid var(--bord); border-bottom: 1px solid var(--bord); }
+.preview-window {
+  border: 1px solid var(--bord2); border-radius: var(--r3); overflow: hidden;
+  box-shadow: var(--sh3); background: var(--bg2);
+  max-width: 1040px; margin: 0 auto;
+}
+.pw-bar {
+  height: 38px; background: var(--bg3); display: flex; align-items: center;
+  padding: 0 16px; gap: 8px; border-bottom: 1px solid var(--bord);
+}
+.pw-dot { width: 11px; height: 11px; border-radius: 50%; }
+.pw-dot.r{background:#ff5f57} .pw-dot.y{background:#febc2e} .pw-dot.g{background:#28c840}
+.pw-url { font-family: var(--mono); font-size: 11.5px; color: var(--text3); margin-left: 10px; }
+/* Mode switch dans le preview */
+.pw-switch {
+  display: flex; margin-left: auto; gap: 0;
+  background: var(--bg4); border: 1px solid var(--bord); border-radius: 7px; padding: 2px;
+}
+.pw-tab {
+  padding: 4px 14px; border-radius: 5px; font-size: 12px; font-weight: 500;
+  color: var(--text3); transition: all .18s;
+}
+.pw-tab.on { background: var(--bg2); color: var(--text); box-shadow: var(--sh1); }
+
+/* Dashboard cards inside preview */
+.pw-body { padding: 24px; }
+.pw-score-row { display: flex; gap: 16px; margin-bottom: 16px; align-items: stretch; }
+.pw-score-main {
+  flex: 0 0 auto; background: var(--bg3); border: 1px solid var(--bord2);
+  border-radius: var(--r2); padding: 24px 28px;
+  display: flex; align-items: center; gap: 24px;
+}
+.pw-ring { position: relative; flex-shrink: 0; }
+.pw-ring svg { transform: rotate(-90deg); display: block; }
+.pw-ring-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.pw-ring-n { font-family: var(--disp); font-size: 24px; font-weight: 800; color: var(--text); }
+.pw-ring-l { font-size: 9px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+.pw-score-label h3 { font-family: var(--disp); font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.pw-score-label p  { font-size: 12.5px; color: var(--text2); line-height: 1.5; }
+.pw-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.pw-chip {
+  padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; border: 1px solid;
+}
+.pch-b  { background: rgba(37,99,235,.1);  color: #60a5fa;   border-color: rgba(37,99,235,.25); }
+.pch-g  { background: rgba(34,197,94,.1);  color: #4ade80;   border-color: rgba(34,197,94,.25); }
+.pch-o  { background: rgba(245,158,11,.1); color: #fbbf24;   border-color: rgba(245,158,11,.25); }
+.pw-metrics { flex: 1; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.pw-metric {
+  background: var(--bg3); border: 1px solid var(--bord); border-radius: var(--r1); padding: 16px;
+}
+.pw-metric-name { font-size: 11px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+.pw-metric-val  { font-family: var(--disp); font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.pw-metric-sub  { font-size: 11.5px; color: var(--text3); }
+.pw-bar { height: 3px; background: var(--bg4); border-radius: 99px; margin-top: 10px; }
+.pw-fill{ height: 100%; border-radius: 99px; }
+.pf-a  { background: var(--accent); }
+.pf-g  { background: var(--green); }
+.pf-o  { background: var(--orange); }
+
+/* Alert strip */
+.pw-alert {
+  background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.18);
+  border-radius: var(--r1); padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; margin-bottom: 10px;
+}
+.pw-alert svg { stroke: var(--red); fill: none; width: 16px; height: 16px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.pw-alert strong { color: var(--red); font-weight: 600; margin-right: 6px; }
+.pw-alert span   { color: var(--text2); }
+.pw-alert-fix    { margin-left: auto; font-size: 12px; color: var(--accent); font-weight: 500; white-space: nowrap; }
+
+/* Expert table (hidden by default in preview) */
+.pw-expert { display: none; }
+.pw-expert table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.pw-expert th { text-align: left; padding: 8px 12px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); border-bottom: 1px solid var(--bord); }
+.pw-expert td { padding: 10px 12px; border-bottom: 1px solid var(--bord); color: var(--text2); }
+.pw-expert td:last-child { color: var(--text); font-weight: 500; text-align: right; }
+.pw-expert tr:last-child td { border-bottom: none; }
+.val-g { color: var(--green) !important; }
+.val-r { color: var(--red) !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   3. STATISTIQUES CLÉS
+   ═══════════════════════════════════════════════════════════════ */
+#stats { background: var(--bg); }
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: var(--bord); border: 1px solid var(--bord);
+  border-radius: var(--r2); overflow: hidden;
+}
+.stat-box {
+  background: var(--bg1); padding: 40px 32px; text-align: center;
+  transition: background .22s;
+}
+.stat-box:hover { background: var(--bg2); }
+.stat-n {
+  font-family: var(--disp); font-size: 48px; font-weight: 800;
+  letter-spacing: -.06em; color: var(--text); line-height: 1; margin-bottom: 10px;
+}
+.stat-l { font-size: 13.5px; color: var(--text3); }
+
+/* ═══════════════════════════════════════════════════════════════
+   4. FONCTIONNALITÉS
+   ═══════════════════════════════════════════════════════════════ */
+#features { background: var(--bg1); border-top: 1px solid var(--bord); }
+.feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.feat-card {
+  background: var(--bg2); border: 1px solid var(--bord2); border-radius: var(--r2);
+  padding: 28px 26px; transition: all .22s; position: relative; overflow: hidden;
+}
+.feat-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--alight) 0%, transparent 55%);
+  opacity: 0; transition: opacity .28s;
+}
+.feat-card:hover { border-color: var(--abord); transform: translateY(-3px); box-shadow: var(--sh2); }
+.feat-card:hover::before { opacity: 1; }
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 11px;
+  background: var(--alight); border: 1px solid var(--abord);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+}
+.feat-icon svg { stroke: var(--accent); fill: none; width: 20px; height: 20px; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.feat-card h3 { font-family: var(--disp); font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.feat-card p  { font-size: 13.5px; color: var(--text3); line-height: 1.65; }
+
+/* ═══════════════════════════════════════════════════════════════
+   5. ARTICLES
+   ═══════════════════════════════════════════════════════════════ */
+#articles { background: var(--bg); border-top: 1px solid var(--bord); }
+.art-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+}
+.art-card {
+  background: var(--bg1); border: 1px solid var(--bord); border-radius: var(--r2);
+  padding: 28px; transition: all .22s; cursor: none;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.art-card:hover { border-color: var(--bord2); transform: translateY(-3px); box-shadow: var(--sh2); }
+.art-tag {
+  display: inline-flex; padding: 3px 10px; border-radius: 99px;
+  font-family: var(--mono); font-size: 11px; font-weight: 400;
+  background: var(--bg3); border: 1px solid var(--bord2); color: var(--text3);
+  width: fit-content; letter-spacing: .3px;
+}
+.art-title { font-family: var(--disp); font-size: 17px; font-weight: 700; line-height: 1.35; transition: color .18s; }
+.art-card:hover .art-title { color: var(--accent); }
+.art-desc  { font-size: 13.5px; color: var(--text3); line-height: 1.65; flex: 1; }
+.art-meta  { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 7px; }
+.art-link  {
+  display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+  font-size: 13px; font-weight: 500; color: var(--accent);
+  transition: gap .2s;
+}
+.art-link:hover { gap: 10px; }
+.art-link svg { stroke: var(--accent); fill: none; width: 14px; height: 14px; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ═══════════════════════════════════════════════════════════════
+   6. TABLEAU DE BORD COMPLET
+   ═══════════════════════════════════════════════════════════════ */
+#dashboard { background: var(--bg1); border-top: 1px solid var(--bord); }
+.dash-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 48px; }
+.dash-card {
+  background: var(--bg2); border: 1px solid var(--bord2); border-radius: var(--r2);
+  padding: 26px; transition: all .22s;
+}
+.dash-card:hover { border-color: var(--abord); box-shadow: var(--sh1); transform: translateY(-2px); }
+.dc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+.dc-icon {
+  width: 42px; height: 42px; border-radius: 10px; background: var(--bg3);
+  border: 1px solid var(--bord); display: flex; align-items: center; justify-content: center;
+}
+.dc-icon svg { stroke: var(--accent); fill: none; width: 19px; height: 19px; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.dc-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; display: flex; align-items: center; gap: 5px; }
+.dc-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+.dg { background: rgba(34,197,94,.1);  color: #4ade80; } .dg::before { background: var(--green); }
+.dw { background: rgba(245,158,11,.1); color: #fbbf24; } .dw::before { background: var(--orange); }
+.dr { background: rgba(239,68,68,.1);  color: #f87171; } .dr::before { background: var(--red); }
+.db { background: rgba(37,99,235,.1);  color: #93c5fd; } .db::before { background: var(--accent); }
+.dc-name { font-size: 12.5px; font-weight: 500; color: var(--text3); letter-spacing: .2px; margin-bottom: 5px; }
+.dc-val  { font-family: var(--disp); font-size: 32px; font-weight: 800; letter-spacing: -.05em; line-height: 1; margin-bottom: 5px; }
+.dc-sub  { font-size: 12.5px; color: var(--text3); }
+.dc-bar  { height: 3px; background: var(--bg4); border-radius: 99px; margin-top: 16px; overflow: hidden; }
+.dc-fill { height: 100%; border-radius: 99px; transition: width 1.1s cubic-bezier(.16,1,.3,1); }
+.dfg { background: var(--green); }
+.dfa { background: var(--accent); }
+.dfo { background: var(--orange); }
+/* Score card large */
+.dash-card.score-wide {
+  grid-column: 1/-1;
+  display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+}
+.score-ring-w { position: relative; flex-shrink: 0; }
+.score-ring-w svg { transform: rotate(-90deg); display: block; }
+.score-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.srn { font-family: var(--disp); font-size: 34px; font-weight: 800; letter-spacing: -.05em; }
+.srl { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .9px; }
+.score-info h2 { font-family: var(--disp); font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.score-info p  { font-size: 14px; color: var(--text2); line-height: 1.65; max-width: 440px; }
+.score-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   7. À PROPOS
+   ═══════════════════════════════════════════════════════════════ */
+#about { background: var(--bg); border-top: 1px solid var(--bord); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.about-left h2 { font-family: var(--disp); font-size: clamp(28px,4vw,42px); font-weight: 800; letter-spacing: -.035em; margin-bottom: 20px; }
+.about-left p  { font-size: 15px; color: var(--text2); line-height: 1.8; margin-bottom: 16px; }
+.mode-cards { display: flex; flex-direction: column; gap: 12px; }
+.mode-card  {
+  background: var(--bg2); border: 1px solid var(--bord2); border-radius: var(--r1);
+  padding: 20px 22px;
+}
+.mode-card h4 { font-family: var(--disp); font-size: 15px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.mode-badge { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+.mb-s { background: var(--bg4); color: var(--text3); }
+.mb-e { background: var(--alight); color: #93c5fd; }
+.mode-card p { font-size: 13px; color: var(--text3); line-height: 1.65; }
+.tech-list { margin-top: 28px; }
+.tech-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 0; border-bottom: 1px solid var(--bord);
+  font-size: 13.5px; color: var(--text2);
+}
+.tech-row:last-child { border-bottom: none; }
+.tech-row svg { stroke: var(--accent); fill: none; width: 15px; height: 15px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.soc-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+.soc-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: 9px;
+  background: var(--bg2); border: 1px solid var(--bord2);
+  font-size: 13.5px; font-weight: 500; color: var(--text2);
+  transition: all .2s;
+}
+.soc-link:hover { border-color: var(--bord2); color: var(--text); transform: translateY(-2px); box-shadow: var(--sh2); }
+.soc-link svg { stroke: currentColor; fill: none; width: 16px; height: 16px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ═══════════════════════════════════════════════════════════════
+   8. FOOTER
+   ═══════════════════════════════════════════════════════════════ */
+footer {
+  background: var(--bg1); border-top: 1px solid var(--bord);
+  padding: 48px clamp(20px,5vw,80px) 32px;
+}
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand p { font-size: 13.5px; color: var(--text3); line-height: 1.7; margin-top: 12px; max-width: 280px; }
+.footer-col h5 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.3px; color: var(--text3); margin-bottom: 14px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.footer-col a  { font-size: 13.5px; color: var(--text3); transition: color .18s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  border-top: 1px solid var(--bord); padding-top: 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--text3);
+}
+.footer-bottom a { color: var(--text3); transition: color .18s; }
+.footer-bottom a:hover { color: var(--text); }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .pw-score-row { flex-direction: column; }
+  .pw-metrics { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 900px) {
+  .feat-grid, .art-grid { grid-template-columns: 1fr 1fr; }
+  .dash-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+}
+@media (max-width: 600px) {
+  .feat-grid, .art-grid { grid-template-columns: 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 40px; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .pw-metrics { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<!-- © 2026 Shams Guettaf. Tous droits réservés. -->
+
+<div id="cd"></div>
+<div id="cr"></div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="nav">
+  <div class="nav-brand">
+    <a href="#hero" class="nav-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </a>
+    <span class="nav-name">SENTINEL</span>
+    <span class="nav-v" id="nav-v">v3.28</span>
+  </div>
+  <nav class="nav-links">
+    <a href="#hero"      class="nav-a" data-s="hero">Accueil</a>
+    <a href="#preview"   class="nav-a" data-s="preview">Aperçu</a>
+    <a href="#features"  class="nav-a" data-s="features">Fonctionnalités</a>
+    <a href="#articles"  class="nav-a" data-s="articles">Articles</a>
+    <a href="#dashboard" class="nav-a" data-s="dashboard">Dashboard</a>
+    <a href="#about"     class="nav-a" data-s="about">À propos</a>
+  </nav>
+  <div class="nav-actions">
+    <a href="#preview" class="btn-ghost">
+      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Voir un exemple
+    </a>
+    <a href="#about" class="btn-cta">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Télécharger
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════ 1. HERO ═══════════ -->
+<section id="hero" class="section">
+  <div class="container">
+    <div class="hero-eyebrow rv">
+      <span class="hero-eyebrow-dot"></span>
+      Version <span id="hero-v">3.28</span> — Multi-plateforme
+    </div>
+    <h1 class="rv">Votre ordinateur,<br>diagnostiqué en<br><span class="accent-word">quelques secondes</span></h1>
+    <p class="hero-sub rv">SENTINEL analyse votre système et génère un rapport HTML complet. Sécurité, performance, batterie — 100% local, aucune donnée transmise.</p>
+    <div class="hero-ctas rv">
+      <a href="#about" class="btn-cta">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger SENTINEL
+      </a>
+      <a href="#preview" class="btn-ghost">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Voir un exemple de rapport
+      </a>
+    </div>
+    <div class="plat-row rv">
+      <div class="plat-chip"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>macOS Intel</div>
+      <div class="plat-chip"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>macOS Apple Silicon</div>
+      <div class="plat-chip"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Windows 10 / 11</div>
+      <div class="plat-chip"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Linux</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2. APERÇU RAPPORT ═══════════ -->
+<section id="preview" class="section">
+  <div class="container">
+    <div class="rv" style="margin-bottom:40px">
+      <div class="section-tag">Aperçu du rapport</div>
+      <h2 class="section-title">Ce que vous voyez<br>après chaque analyse</h2>
+      <p class="section-sub">Deux modes d'affichage. Un seul clic pour basculer.</p>
+    </div>
+    <div class="preview-window rv">
+      <div class="pw-bar">
+        <div class="pw-dot r"></div><div class="pw-dot y"></div><div class="pw-dot g"></div>
+        <span class="pw-url">Sentinel_2026-03-28_rapport.html — Safari</span>
+        <div class="pw-switch">
+          <span class="pw-tab on" id="pws-s" onclick="pwSwitch('s')">Mode Simple</span>
+          <span class="pw-tab"    id="pws-e" onclick="pwSwitch('e')">Mode Expert</span>
+        </div>
+      </div>
+      <div class="pw-body">
+        <!-- SIMPLE -->
+        <div id="pw-s">
+          <div class="pw-alert">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div><strong>Verrouillage écran désactivé.</strong><span>Votre Mac peut être déverrouillé sans mot de passe.</span></div>
+            <span class="pw-alert-fix">Régler dans Réglages Système</span>
+          </div>
+          <div class="pw-score-row">
+            <div class="pw-score-main">
+              <div class="pw-ring">
+                <svg width="96" height="96" viewBox="0 0 96 96">
+                  <circle cx="48" cy="48" r="40" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="6"/>
+                  <circle cx="48" cy="48" r="40" fill="none" stroke="#2563eb" stroke-width="6"
+                    stroke-dasharray="251" stroke-dashoffset="38" stroke-linecap="round"/>
+                </svg>
+                <div class="pw-ring-center"><div class="pw-ring-n">85</div><div class="pw-ring-l">/ 100</div></div>
+              </div>
+              <div class="pw-score-label">
+                <h3>Score : Excellent</h3>
+                <p style="font-size:13px;color:#a8a49c;line-height:1.5">Votre Mac est en très bon état.<br>1 point à corriger.</p>
+                <div class="pw-chips">
+                  <span class="pw-chip pch-b">Sécu 88</span>
+                  <span class="pw-chip pch-g">Batterie 86</span>
+                  <span class="pw-chip pch-o">1 alerte</span>
+                </div>
+              </div>
+            </div>
+            <div class="pw-metrics">
+              <div class="pw-metric">
+                <div class="pw-metric-name">Sécurité</div>
+                <div class="pw-metric-val" style="color:#93c5fd">88</div>
+                <div class="pw-metric-sub">1 protection manquante</div>
+                <div class="pw-bar"><div class="pw-fill pf-a" style="width:88%"></div></div>
+              </div>
+              <div class="pw-metric">
+                <div class="pw-metric-name">Batterie</div>
+                <div class="pw-metric-val" style="color:#4ade80">78%</div>
+                <div class="pw-metric-sub">147 cycles · 3h 42min</div>
+                <div class="pw-bar"><div class="pw-fill pf-g" style="width:78%"></div></div>
+              </div>
+              <div class="pw-metric">
+                <div class="pw-metric-name">Stockage</div>
+                <div class="pw-metric-val">56%</div>
+                <div class="pw-metric-sub">225 Go libres</div>
+                <div class="pw-bar"><div class="pw-fill pf-o" style="width:56%"></div></div>
+              </div>
+              <div class="pw-metric">
+                <div class="pw-metric-name">Performance</div>
+                <div class="pw-metric-val" style="color:#93c5fd">92</div>
+                <div class="pw-metric-sub">M3 Pro · 52 °C</div>
+                <div class="pw-bar"><div class="pw-fill pf-a" style="width:92%"></div></div>
+              </div>
+              <div class="pw-metric">
+                <div class="pw-metric-name">Connexion</div>
+                <div class="pw-metric-val" style="color:#4ade80;font-size:17px;font-weight:700">WPA2</div>
+                <div class="pw-metric-sub">FreeWifi · 5 GHz</div>
+                <div class="pw-bar"><div class="pw-fill pf-g" style="width:75%"></div></div>
+              </div>
+              <div class="pw-metric">
+                <div class="pw-metric-name">Doublons</div>
+                <div class="pw-metric-val" style="color:#fbbf24">4</div>
+                <div class="pw-metric-sub">10.8 Mo à récupérer</div>
+                <div class="pw-bar"><div class="pw-fill" style="width:8%;background:var(--orange)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- EXPERT -->
+        <div id="pw-e" class="pw-expert">
+          <table>
+            <thead>
+              <tr><th>Module</th><th>Clé</th><th>Valeur</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Système</td><td>Modèle</td><td>MacBook Pro 14-inch, 2023</td></tr>
+              <tr><td>Système</td><td>Processeur</td><td>Apple M3 Pro — 12 cœurs</td></tr>
+              <tr><td>Système</td><td>RAM</td><td>18 Go LPDDR5 6400 MHz</td></tr>
+              <tr><td>Thermique</td><td>Temp. CPU</td><td class="val-g">52.3 °C</td></tr>
+              <tr><td>Thermique</td><td>Temp. GPU</td><td class="val-g">48.1 °C</td></tr>
+              <tr><td>Batterie</td><td>Cycles</td><td>147 / 1000</td></tr>
+              <tr><td>Batterie</td><td>Capacité</td><td>96% de l'origine</td></tr>
+              <tr><td>Batterie</td><td>Tension</td><td>12.4 V / −2 100 mA</td></tr>
+              <tr><td>Sécurité</td><td>FileVault</td><td class="val-g">Actif — AES-XTS 256 bits</td></tr>
+              <tr><td>Sécurité</td><td>Verrouillage</td><td class="val-r">Désactivé</td></tr>
+              <tr><td>Sécurité</td><td>Secure Boot</td><td class="val-g">Full Security</td></tr>
+              <tr><td>Réseau</td><td>SSID</td><td>FreeWifi_Secure · WPA2 · 5 GHz</td></tr>
+              <tr><td>Réseau</td><td>IP locale</td><td>192.168.1.42</td></tr>
+              <tr><td>Stockage</td><td>SMART</td><td class="val-g">Verified</td></tr>
+              <tr><td>Stockage</td><td>Débit lecture</td><td>2 800 Mo/s</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3. STATS ═══════════ -->
+<section id="stats" class="section" style="padding-top:0;padding-bottom:0">
+  <div class="container">
+    <div class="stats-grid cs">
+      <div class="stat-box"><div class="stat-n">240+</div><div class="stat-l">Métriques analysées</div></div>
+      <div class="stat-box"><div class="stat-n">4</div><div class="stat-l">Plateformes supportées</div></div>
+      <div class="stat-box"><div class="stat-n">0</div><div class="stat-l">Données transmises</div></div>
+      <div class="stat-box"><div class="stat-n" id="v-stat">3.28</div><div class="stat-l">Version actuelle</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4. FONCTIONNALITÉS ═══════════ -->
+<section id="features" class="section">
+  <div class="container">
+    <div class="rv" style="margin-bottom:48px">
+      <div class="section-tag">Fonctionnalités</div>
+      <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+      <p class="section-sub">Un diagnostic complet en langage clair ou en données techniques selon votre niveau.</p>
+    </div>
+    <div class="feat-grid cs">
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Audit de sécurité</h3>
+        <p>Gatekeeper, SIP, FileVault, pare-feu, Secure Boot, SSH. Score sur 100 avec actions correctives précises.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Performance système</h3>
+        <p>CPU, GPU, RAM, températures, consommation énergétique et processus actifs en temps réel.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M23 7h-1V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2h1V7z"/></svg></div>
+        <h3>Santé de la batterie</h3>
+        <p>Cycles effectués, capacité restante, tension, autonomie estimée et seuil de remplacement.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <h3>Stockage et doublons</h3>
+        <p>Volumes SMART, fichiers volumineux et détection de fichiers en double avec espace récupérable.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M1.5 8.5a13 13 0 0 1 21 0M5 12a9 9 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01"/></svg></div>
+        <h3>Analyse réseau</h3>
+        <p>WiFi, IP, DNS, VPN, appareils connectés, connexions actives et score de sécurité du réseau.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        <h3>Applications et périphériques</h3>
+        <p>Versions installées, droits caméra/micro, USB, Thunderbolt, Bluetooth et LaunchAgents au démarrage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5. ARTICLES ═══════════ -->
+<section id="articles" class="section">
+  <div class="container">
+    <div class="rv" style="margin-bottom:48px">
+      <div class="section-tag">Articles</div>
+      <h2 class="section-title">Guides et tutoriels</h2>
+      <p class="section-sub">Sécurité macOS, batterie, stockage et performance — expliqués clairement.</p>
+    </div>
+    <div class="art-grid cs">
+      <div class="art-card">
+        <span class="art-tag">Sécurité</span>
+        <div class="art-title">Les 8 protections essentielles de macOS en 2026</div>
+        <div class="art-desc">FileVault, Gatekeeper, SIP, pare-feu : comment s'assurer que votre Mac est correctement protégé contre les menaces actuelles.</div>
+        <div class="art-meta"><span>27 mars 2026</span><span>·</span><span>5 min</span></div>
+        <a href="#" class="art-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="art-card">
+        <span class="art-tag">Batterie</span>
+        <div class="art-title">Comprendre les cycles de batterie sur Mac</div>
+        <div class="art-desc">Un cycle, c'est quoi ? Comment interpréter la capacité restante et savoir quand remplacer sa batterie.</div>
+        <div class="art-meta"><span>26 mars 2026</span><span>·</span><span>4 min</span></div>
+        <a href="#" class="art-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="art-card">
+        <span class="art-tag">Stockage</span>
+        <div class="art-title">Comment SENTINEL détecte les fichiers en double</div>
+        <div class="art-desc">Algorithme MD5 rapide, fichiers de plus de 1 Mo, liens Finder directs : le module de détection expliqué.</div>
+        <div class="art-meta"><span>25 mars 2026</span><span>·</span><span>3 min</span></div>
+        <a href="#" class="art-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="art-card">
+        <span class="art-tag">Interface</span>
+        <div class="art-title">Mode Simple vs Mode Expert : lequel choisir ?</div>
+        <div class="art-desc">Le Mode Simple traduit les données en verdicts colorés. Le Mode Expert affiche toutes les métriques brutes.</div>
+        <div class="art-meta"><span>24 mars 2026</span><span>·</span><span>3 min</span></div>
+        <a href="#" class="art-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="art-card">
+        <span class="art-tag">Windows</span>
+        <div class="art-title">SENTINEL sur Windows : BitLocker, Defender, TPM</div>
+        <div class="art-desc">PowerShell, WMI, BitLocker, Defender, TPM, Secure Boot UEFI — tout ce que la version Windows analyse.</div>
+        <div class="art-meta"><span>23 mars 2026</span><span>·</span><span>4 min</span></div>
+        <a href="#" class="art-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="art-card">
+        <span class="art-tag">Linux</span>
+        <div class="art-title">SENTINEL sur Linux : /proc, lsblk, nmcli</div>
+        <div class="art-desc">Comment la version Linux collecte les données via le système de fichiers virtuel /proc et les outils natifs.</div>
+        <div class="art-meta"><span>22 mars 2026</span><span>·</span><span>4 min</span></div>
+        <a href="#" class="art-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6. TABLEAU DE BORD COMPLET ═══════════ -->
+<section id="dashboard" class="section">
+  <div class="container">
+    <div class="rv" style="margin-bottom:48px">
+      <div class="section-tag">Tableau de bord</div>
+      <h2 class="section-title">Votre Mac en un coup d'œil</h2>
+      <p class="section-sub">Rapport exemple — Mode Simple. Compréhensible en quelques secondes.</p>
+    </div>
+    <div class="dash-grid">
+      <!-- Score -->
+      <div class="dash-card score-wide rv">
+        <div class="score-ring-w">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="7"/>
+            <circle cx="55" cy="55" r="46" fill="none" stroke="#2563eb" stroke-width="7"
+              stroke-dasharray="289" stroke-dashoffset="43" stroke-linecap="round"/>
+          </svg>
+          <div class="score-ring-center"><span class="srn">85</span><span class="srl">/ 100</span></div>
+        </div>
+        <div class="score-info">
+          <h2>Score santé global : Excellent</h2>
+          <p>Votre Mac est en très bon état. Activez le verrouillage écran dans Réglages Système pour atteindre le score maximum.</p>
+          <div class="score-chips">
+            <span class="pw-chip pch-b">Sécurité 88</span>
+            <span class="pw-chip pch-g">Batterie 86</span>
+            <span class="pw-chip pch-g">Perf. 92</span>
+            <span class="pw-chip pch-o">1 alerte</span>
+          </div>
+        </div>
+      </div>
+      <!-- Sécurité -->
+      <div class="dash-card rv">
+        <div class="dc-top">
+          <div class="dc-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span class="dc-badge dw">1 problème</span>
+        </div>
+        <div class="dc-name">Sécurité</div>
+        <div class="dc-val" style="color:#93c5fd">88<span style="font-size:16px;font-weight:400;color:var(--text3)">/100</span></div>
+        <div class="dc-sub">Verrouillage écran désactivé</div>
+        <div class="dc-bar"><div class="dc-fill dfa" style="width:88%"></div></div>
+      </div>
+      <!-- Batterie -->
+      <div class="dash-card rv">
+        <div class="dc-top">
+          <div class="dc-icon"><svg viewBox="0 0 24 24"><path d="M23 7h-1V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2h1V7z"/></svg></div>
+          <span class="dc-badge dg">Excellente</span>
+        </div>
+        <div class="dc-name">Batterie</div>
+        <div class="dc-val" style="color:#4ade80">78<span style="font-size:16px;font-weight:400;color:var(--text3)">%</span></div>
+        <div class="dc-sub">147 cycles · 3h 42min restantes</div>
+        <div class="dc-bar"><div class="dc-fill dfg" style="width:78%"></div></div>
+      </div>
+      <!-- Stockage -->
+      <div class="dash-card rv">
+        <div class="dc-top">
+          <div class="dc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+          <span class="dc-badge dg">Normal</span>
+        </div>
+        <div class="dc-name">Stockage</div>
+        <div class="dc-val">56<span style="font-size:16px;font-weight:400;color:var(--text3)">%</span></div>
+        <div class="dc-sub">287 Go / 512 Go · 225 Go libres</div>
+        <div class="dc-bar"><div class="dc-fill dfo" style="width:56%"></div></div>
+      </div>
+      <!-- Performance -->
+      <div class="dash-card rv">
+        <div class="dc-top">
+          <div class="dc-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <span class="dc-badge dg">Rapide</span>
+        </div>
+        <div class="dc-name">Performance</div>
+        <div class="dc-val" style="color:#93c5fd">92<span style="font-size:16px;font-weight:400;color:var(--text3)">/100</span></div>
+        <div class="dc-sub">Apple M3 Pro · 18 Go · 52 °C</div>
+        <div class="dc-bar"><div class="dc-fill dfa" style="width:92%"></div></div>
+      </div>
+      <!-- Connexion -->
+      <div class="dash-card rv">
+        <div class="dc-top">
+          <div class="dc-icon"><svg viewBox="0 0 24 24"><path d="M1.5 8.5a13 13 0 0 1 21 0M5 12a9 9 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01"/></svg></div>
+          <span class="dc-badge dg">Sécurisé</span>
+        </div>
+        <div class="dc-name">Connexion</div>
+        <div class="dc-val" style="color:#4ade80;font-size:22px;font-weight:700;letter-spacing:0">WPA2</div>
+        <div class="dc-sub">FreeWifi_Secure · 5 GHz · −54 dBm</div>
+        <div class="dc-bar"><div class="dc-fill dfg" style="width:75%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 7. À PROPOS ═══════════ -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-left rv">
+        <div class="section-tag">À propos</div>
+        <h2>SENTINEL — développé<br>par SHAMS&amp;DEAN</h2>
+        <p>SENTINEL analyse votre ordinateur et génère un rapport HTML complet 100% local. Aucune donnée n'est transmise à un serveur externe. Le rapport s'ouvre dans n'importe quel navigateur.</p>
+        <p>Deux modes d'affichage : <strong>Mode Simple</strong> pour les utilisateurs non-techniques — verdicts colorés et actions concrètes. <strong>Mode Expert</strong> avec toutes les métriques brutes pour les professionnels IT.</p>
+        <div class="soc-row">
+          <a href="https://www.linkedin.com/in/shamsguettaf/" class="soc-link" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn
+          </a>
+          <a href="https://x.com/shamsetdean" class="soc-link" target="_blank">
+            <svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M4 4l16 16M20 4L4 20"/></svg>X
+          </a>
+          <a href="https://github.com/shamsetdean/sentinel" class="soc-link" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub
+          </a>
+          <a href="https://abstracted-crush-f4e.notion.site/SHAMS-DEAN-286d3f1e5597815f9fdfc90d48445621" class="soc-link" target="_blank">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>Notion
+          </a>
+        </div>
+      </div>
+      <div class="rv">
+        <div class="mode-cards" style="margin-bottom:28px">
+          <div class="mode-card">
+            <h4><span class="mode-badge mb-s">Simple</span>Mode Simple — pour tout le monde</h4>
+            <p>Cartes compactes avec verdicts colorés. Vert = bon, Orange = surveiller, Rouge = agir. Lecture complète en moins de 30 secondes, sans jargon technique.</p>
+          </div>
+          <div class="mode-card">
+            <h4><span class="mode-badge mb-e">Expert</span>Mode Expert — pour les professionnels</h4>
+            <p>240+ métriques, températures, tensions, IOPS, SMART, LaunchAgents, connexions réseau actives. Pour les administrateurs système et professionnels IT.</p>
+          </div>
+        </div>
+        <div class="section-tag" style="margin-bottom:10px">Compatibilité</div>
+        <div class="tech-list">
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>macOS Intel (x86_64) — 2017 à 2020</div>
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>macOS Apple Silicon — M1, M2, M3, M4</div>
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Windows 10 / Windows 11 (x64)</div>
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Ubuntu 20.04+ / Debian 11+ / Fedora 36+</div>
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Python 3.9+ — aucune dépendance tierce</div>
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Rapport HTML — s'ouvre dans tout navigateur</div>
+          <div class="tech-row"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>100% local — zéro donnée transmise</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 8. FOOTER ═══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
+          <div style="width:28px;height:28px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span style="font-family:var(--disp);font-size:16px;font-weight:700">SENTINEL</span>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--bg3);border:1px solid var(--bord2);padding:2px 8px;border-radius:99px" id="f-v">v3.28</span>
+        </div>
+        <p>Application de diagnostic système multi-plateforme. Rapport HTML 100% local — aucune donnée transmise.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Sections</h5>
+        <ul>
+          <li><a href="#hero">Accueil</a></li>
+          <li><a href="#preview">Aperçu</a></li>
+          <li><a href="#features">Fonctionnalités</a></li>
+          <li><a href="#dashboard">Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <ul>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Licence propriétaire</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">CGU</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Liens</h5>
+        <ul>
+          <li><a href="https://github.com/shamsetdean/sentinel" target="_blank">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/shamsguettaf/" target="_blank">LinkedIn</a></li>
+          <li><a href="https://x.com/shamsetdean" target="_blank">X / Twitter</a></li>
+          <li><a href="https://abstracted-crush-f4e.notion.site/SHAMS-DEAN-286d3f1e5597815f9fdfc90d48445621" target="_blank">Notion</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Shams Guettaf — SHAMS&amp;DEAN. Tous droits réservés. Version <span id="f-vr">3.28</span></span>
+      <span style="display:flex;gap:20px">
+        <a href="#">Mentions légales</a>
+        <a href="#">Licence</a>
+        <a href="#">Confidentialité</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT
+     © 2026 Shams Guettaf. Tous droits réservés.
+     Usage interdit sans autorisation écrite.
+     Contact : shamsetdean@gmail.com
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+// © 2026 Shams Guettaf. Tous droits réservés.
+// Usage interdit sans autorisation écrite. Contact : shamsetdean@gmail.com
+'use strict';
+
+/* ── Version automatique M.J ──────────────────────────────── */
+(function(){
+  var d=new Date(), v=(d.getMonth()+1)+'.'+d.getDate();
+  ['nav-v','hero-v','v-stat','f-v','f-vr'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el) return;
+    el.textContent = (id==='nav-v'||id==='f-v') ? 'v'+v : v;
+  });
+  document.title='SENTINEL v'+v+' — protect · clean · control';
+})();
+
+/* ── Preview switch Simple / Expert ──────────────────────── */
+function pwSwitch(m){
+  document.getElementById('pws-s').classList.toggle('on', m==='s');
+  document.getElementById('pws-e').classList.toggle('on', m==='e');
+  var ps=document.getElementById('pw-s'), pe=document.getElementById('pw-e');
+  if(ps) ps.style.display=m==='s'?'block':'none';
+  if(pe) { pe.style.display=m==='e'?'block':'none'; }
+}
+
+/* ── Scroll reveal via IntersectionObserver ──────────────── */
+var _io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('in'); _io.unobserve(e.target); }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.rv,.cs').forEach(function(el){ _io.observe(el); });
+document.addEventListener('scroll',function(){
+  document.querySelectorAll('.rv:not(.in),.cs:not(.in)').forEach(function(el){ _io.observe(el); });
+},{passive:true});
+
+/* ── Nav active section highlight ────────────────────────── */
+(function(){
+  var links=document.querySelectorAll('.nav-a[data-s]');
+  var sections=[];
+  links.forEach(function(a){
+    var el=document.getElementById(a.dataset.s);
+    if(el) sections.push({el:el,a:a});
+  });
+  var tick=false;
+  window.addEventListener('scroll',function(){
+    if(tick) return; tick=true;
+    requestAnimationFrame(function(){
+      var mid=window.scrollY+window.innerHeight/3;
+      var active=null;
+      sections.forEach(function(s){
+        if(s.el.offsetTop<=mid) active=s;
+      });
+      links.forEach(function(a){ a.classList.remove('act'); });
+      if(active) active.a.classList.add('act');
+      tick=false;
+    });
+  },{passive:true});
+})();
+
+/* ── Curseur bicercle avec inertie ────────────────────────── */
+var cd=document.getElementById('cd'), cr=document.getElementById('cr');
+var mx=window.innerWidth/2, my=window.innerHeight/2, rx=mx, ry=my;
+document.addEventListener('mousemove',function(e){
+  mx=e.clientX; my=e.clientY;
+  cd.style.left=mx+'px'; cd.style.top=my+'px';
+});
+(function raf(){
+  // Inertie : 10% de la distance restante par frame
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  cr.style.left=rx+'px'; cr.style.top=ry+'px';
+  requestAnimationFrame(raf);
+})();
+document.addEventListener('mousedown',function(){document.body.classList.add('cc');});
+document.addEventListener('mouseup',function(){document.body.classList.remove('cc');});
+var _hs='a,button,.feat-card,.art-card,.dash-card,.soc-link,.plat-chip,.nav-a,.btn-cta,.btn-ghost,.pw-tab,.nav-logo';
+function _ah(el){
+  if(el._hovered) return; el._hovered=true;
+  el.addEventListener('mouseenter',function(){document.body.classList.add('ch');});
+  el.addEventListener('mouseleave',function(){document.body.classList.remove('ch');});
+}
+document.querySelectorAll(_hs).forEach(_ah);
+new MutationObserver(function(){document.querySelectorAll(_hs).forEach(_ah);}).observe(document.body,{childList:true,subtree:true});
+
+/* ── Animer les barres au premier affichage ───────────────── */
+var _barsInit=false;
+var _barsObs=new IntersectionObserver(function(entries){
+  if(entries[0].isIntersecting && !_barsInit){
+    _barsInit=true;
+    document.querySelectorAll('.dc-fill,.pw-fill').forEach(function(b){
+      var w=b.style.width; b.style.width='0';
+      setTimeout(function(){b.style.width=w;},120);
+    });
+  }
+},{threshold:0.2});
+var dashEl=document.getElementById('dashboard');
+if(dashEl) _barsObs.observe(dashEl);
+</script>
+</body>
+</html>
