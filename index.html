@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<!--
+  © 2026 Shams Guettaf. Tous droits réservés.
+  Contact : shamsetdean@gmail.com
+  GitHub  : https://github.com/shamsetdean/sentinel
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="SENTINEL — Diagnostic système macOS, Windows et Linux. Rapport HTML 100% local, aucune donnée transmise.">
+<meta name="author" content="SHAMS&DEAN">
+<meta property="og:title" content="SENTINEL — Diagnostic Système Multi-Plateforme">
+<meta property="og:description" content="Application de diagnostic système pour macOS, Windows et Linux. Rapport HTML 100% local.">
+<title>SENTINEL — protect · clean · control</title>
+
+<!--
+  Polices libres de droits (SIL OFL 1.1 — usage commercial autorisé)
+  DM Sans  : Colophon Foundry · https://fonts.google.com/specimen/DM+Sans
+  DM Mono  : Colophon Foundry · https://fonts.google.com/specimen/DM+Mono
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* © 2026 Shams Guettaf — SENTINEL
+   Polices : DM Sans + DM Mono (SIL OFL 1.1) */
+
+/* ── Variables ─────────────────────────────────────────────── */
+:root {
+  --navy:   #0d1526;
+  --navy2:  #18202e;
+  --navy3:  #1e293b;
+  --navy4:  #253347;
+  --blue:   #2563eb;
+  --blue2:  #3b82f6;
+  --blue3:  #60a5fa;
+  --green:  #22c55e;
+  --orange: #f97316;
+  --red:    #ef4444;
+  --text:   #f1f5f9;
+  --muted:  #64748b;
+  --light:  #94a3b8;
+  --border: rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --card:   rgba(255,255,255,.04);
+  --card2:  rgba(255,255,255,.06);
+  --radius: 14px;
+  --mono:   'DM Mono', monospace;
+  --sans:   'DM Sans', sans-serif;
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; font-size:16px; scroll-padding-top:64px; }
+body {
+  font-family: var(--sans);
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color:var(--blue2); text-decoration:none; }
+a:hover { text-decoration:underline; }
+img { max-width:100%; display:block; }
+
+/* ── Grain ─────────────────────────────────────────────────── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:.4;
+}
+
+/* ── NAV ───────────────────────────────────────────────────── */
+nav {
+  position:sticky; top:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 5vw; height:64px;
+  background:rgba(13,21,38,.93);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { display:flex; align-items:center; gap:12px; }
+.nav-logo-mark {
+  width:32px; height:32px; border-radius:8px;
+  background:var(--blue);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .2s;
+}
+.nav-logo-mark:hover { transform:scale(1.05) rotate(-5deg); }
+.nav-logo-mark svg { stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.nav-brand { font-size:15px; font-weight:700; letter-spacing:.3px; }
+.nav-ver {
+  font-family:var(--mono); font-size:11px; padding:2px 9px; border-radius:99px;
+  background:rgba(37,99,235,.12); border:1px solid rgba(37,99,235,.2);
+  color:var(--blue3); letter-spacing:.4px;
+}
+.nav-links { display:flex; gap:4px; }
+.nav-links a {
+  padding:6px 14px; border-radius:8px;
+  font-size:13.5px; color:var(--muted); font-weight:500;
+  transition:all .18s;
+}
+.nav-links a:hover { color:var(--text); background:var(--card2); text-decoration:none; }
+.nav-links a.active { color:var(--text); }
+.nav-cta { display:flex; gap:10px; align-items:center; }
+
+/* ── Boutons ────────────────────────────────────────────────── */
+.btn {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:9px 20px; border-radius:9px;
+  font-size:13.5px; font-weight:600; font-family:var(--sans);
+  cursor:pointer; border:none; transition:all .2s;
+}
+.btn svg { stroke:currentColor; fill:none; width:15px; height:15px; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.btn-ghost {
+  background:transparent; border:1.5px solid var(--border2);
+  color:var(--light);
+}
+.btn-ghost:hover { border-color:rgba(255,255,255,.2); color:var(--text); text-decoration:none; }
+.btn-primary { background:var(--blue); color:#fff; }
+.btn-primary:hover { background:#1d4ed8; transform:translateY(-1px); box-shadow:0 4px 18px rgba(37,99,235,.35); text-decoration:none; color:#fff; }
+.btn-lg { padding:12px 28px; font-size:15px; }
+
+/* ── Sections communes ─────────────────────────────────────── */
+section { position:relative; z-index:1; }
+.section-wrap { max-width:1100px; margin:0 auto; }
+.section-label {
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  text-transform:uppercase; letter-spacing:1.8px;
+  color:var(--blue2); margin-bottom:14px;
+}
+.section-title {
+  font-size:clamp(28px,4vw,42px); font-weight:700;
+  line-height:1.15; letter-spacing:-.025em; margin-bottom:14px;
+}
+.section-sub {
+  font-size:16px; color:var(--light); line-height:1.65; font-weight:300;
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+.reveal {
+  opacity:0; transform:translateY(22px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal.visible { opacity:1; transform:none; }
+.reveal-stagger > * {
+  opacity:0; transform:translateY(16px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+.reveal-stagger.visible > *:nth-child(1){opacity:1;transform:none;transition-delay:.05s}
+.reveal-stagger.visible > *:nth-child(2){opacity:1;transform:none;transition-delay:.13s}
+.reveal-stagger.visible > *:nth-child(3){opacity:1;transform:none;transition-delay:.21s}
+.reveal-stagger.visible > *:nth-child(4){opacity:1;transform:none;transition-delay:.29s}
+.reveal-stagger.visible > *:nth-child(5){opacity:1;transform:none;transition-delay:.37s}
+.reveal-stagger.visible > *:nth-child(6){opacity:1;transform:none;transition-delay:.45s}
+
+/* ═══════════════════════════════════════════════
+   §1 HERO
+   ═══════════════════════════════════════════════ */
+#hero {
+  padding:120px 5vw 80px;
+  text-align:center; overflow:hidden; position:relative;
+}
+.hero-glow {
+  position:absolute; top:-120px; left:50%; transform:translateX(-50%);
+  width:860px; height:560px;
+  background:radial-gradient(ellipse at center, rgba(37,99,235,.16) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-label {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:5px 14px; border-radius:99px; margin-bottom:28px;
+  background:rgba(37,99,235,.1); border:1px solid rgba(37,99,235,.22);
+  font-size:12px; font-weight:600; color:var(--blue3);
+  letter-spacing:.5px; text-transform:uppercase;
+}
+.hero-label-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--blue); animation:blink 2s infinite;
+}
+@keyframes blink {0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+#hero h1 {
+  font-size:clamp(44px,6.5vw,76px);
+  font-weight:700; line-height:1.08; letter-spacing:-.03em;
+  margin-bottom:18px; max-width:780px; margin-left:auto; margin-right:auto;
+}
+#hero h1 span {
+  background:linear-gradient(135deg, #60a5fa, #2563eb, #1d4ed8);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub {
+  font-size:clamp(16px,2vw,19px); color:var(--light);
+  max-width:580px; margin:0 auto 40px; line-height:1.7; font-weight:300;
+}
+.hero-actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:52px; }
+
+/* Badges plateformes */
+.platforms { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:64px; }
+.platform-badge {
+  display:flex; align-items:center; gap:7px;
+  padding:6px 14px; border-radius:8px;
+  background:var(--card); border:1px solid var(--border);
+  font-size:12.5px; font-weight:500; color:var(--light);
+  transition:all .18s;
+}
+.platform-badge:hover { border-color:var(--border2); color:var(--text); }
+.platform-badge svg { stroke:var(--blue2); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* Fenêtre navigateur mockup */
+.mockup-wrap {
+  max-width:1100px; margin:0 auto;
+  border-radius:16px; overflow:hidden;
+  border:1px solid var(--border); box-shadow:0 24px 64px rgba(0,0,0,.5);
+}
+.mockup-chrome {
+  height:38px; background:var(--navy3);
+  display:flex; align-items:center; padding:0 16px; gap:8px;
+  border-bottom:1px solid var(--border);
+}
+.dot { width:11px; height:11px; border-radius:50%; }
+.dot.r{background:#ef4444} .dot.y{background:#f59e0b} .dot.g{background:#22c55e}
+.mockup-url { font-family:var(--mono); font-size:11px; color:var(--muted); margin-left:8px; }
+.mode-tabs { display:flex; background:#0d1526; border-bottom:1px solid var(--border); }
+.mode-tab {
+  padding:10px 24px; font-size:13px; font-weight:500;
+  color:var(--muted); cursor:pointer;
+  border-bottom:2px solid transparent; transition:all .2s;
+}
+.mode-tab:hover { color:var(--light); }
+.mode-tab.active { color:var(--text); border-bottom-color:var(--blue); font-weight:600; }
+.mode-pane { display:none; background:var(--navy2); }
+.mode-pane.active { display:block; }
+
+/* Dashboard inline mockup */
+.dash-mock { padding:20px; }
+.dm-alert {
+  background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.18);
+  border-radius:9px; padding:11px 16px; margin-bottom:16px;
+  display:flex; align-items:center; gap:10px; font-size:13px;
+}
+.dm-alert svg { stroke:var(--red); fill:none; width:16px; height:16px; stroke-width:2; flex-shrink:0; }
+.dm-alert strong { color:var(--red); }
+.dm-alert span { color:var(--light); }
+.dm-grid { display:grid; grid-template-columns:1.6fr repeat(5,1fr); gap:10px; }
+.dm-score {
+  background:var(--navy3); border:1px solid var(--border2);
+  border-radius:12px; padding:18px 20px;
+  display:flex; align-items:center; gap:16px;
+}
+.dm-ring { position:relative; flex-shrink:0; }
+.dm-ring svg { transform:rotate(-90deg); display:block; }
+.dm-ring-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.dm-ring-n { font-family:var(--mono); font-size:18px; font-weight:700; }
+.dm-ring-l { font-size:9px; color:var(--muted); }
+.dm-score-info h4 { font-size:13px; font-weight:700; margin-bottom:4px; }
+.dm-score-info p  { font-size:11px; color:var(--muted); line-height:1.45; }
+.dm-chips { display:flex; gap:5px; flex-wrap:wrap; margin-top:8px; }
+.dm-chip { padding:2px 9px; border-radius:99px; font-size:10px; font-weight:600; border:1px solid; }
+.chip-b { background:rgba(37,99,235,.1); color:var(--blue3); border-color:rgba(37,99,235,.22); }
+.chip-g { background:rgba(34,197,94,.1); color:#4ade80; border-color:rgba(34,197,94,.22); }
+.chip-o { background:rgba(249,115,22,.1); color:#fb923c; border-color:rgba(249,115,22,.22); }
+.dm-card {
+  background:var(--navy3); border:1px solid var(--border);
+  border-radius:10px; padding:14px;
+}
+.dm-card-name { font-family:var(--mono); font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:5px; }
+.dm-card-val  { font-size:20px; font-weight:700; letter-spacing:-.03em; margin-bottom:3px; }
+.dm-card-sub  { font-size:10px; color:var(--muted); }
+.dm-bar { height:3px; background:var(--navy); border-radius:99px; margin-top:10px; overflow:hidden; }
+.dm-fill { height:100%; border-radius:99px; }
+.dm-expert table { width:100%; border-collapse:collapse; font-size:13px; }
+.dm-expert th { text-align:left; padding:8px 14px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--muted); border-bottom:1px solid var(--border); }
+.dm-expert td { padding:10px 14px; border-bottom:1px solid var(--border); color:var(--light); }
+.dm-expert td:last-child { color:var(--text); font-weight:500; text-align:right; }
+.dm-expert tr:last-child td { border:none; }
+.dm-expert .v-g { color:var(--green) !important; }
+.dm-expert .v-r { color:var(--red) !important; }
+
+/* Stats band */
+.stats-bar {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:1px; background:var(--border);
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  max-width:1100px; margin:64px auto 0;
+}
+.stat { background:var(--navy); padding:32px 24px; text-align:center; transition:background .2s; }
+.stat:hover { background:var(--navy2); }
+.stat-val { font-family:var(--mono); font-size:38px; font-weight:700; color:var(--blue2); letter-spacing:-.03em; }
+.stat-label { font-size:13px; color:var(--muted); margin-top:6px; }
+
+/* ═══════════════════════════════════════════════
+   §2 FONCTIONNALITÉS
+   ═══════════════════════════════════════════════ */
+#features { padding:100px 5vw; }
+.features-header { text-align:center; max-width:600px; margin:0 auto 60px; }
+.features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:1100px; margin:0 auto; }
+.feature-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:28px;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+  position:relative; overflow:hidden;
+}
+.feature-card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(37,99,235,.05) 0%, transparent 55%);
+  opacity:0; transition:opacity .25s;
+}
+.feature-card:hover { border-color:rgba(37,99,235,.28); transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,0,0,.3); }
+.feature-card:hover::before { opacity:1; }
+.feature-icon {
+  width:44px; height:44px; border-radius:11px;
+  background:rgba(37,99,235,.1); border:1px solid rgba(37,99,235,.18);
+  display:flex; align-items:center; justify-content:center; margin-bottom:18px;
+}
+.feature-icon svg { stroke:var(--blue2); fill:none; width:20px; height:20px; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.feature-title { font-size:15px; font-weight:600; margin-bottom:9px; }
+.feature-desc  { font-size:13.5px; color:var(--muted); line-height:1.65; }
+
+/* ═══════════════════════════════════════════════
+   §3 MODES
+   ═══════════════════════════════════════════════ */
+#modes {
+  padding:80px 5vw;
+  background:linear-gradient(180deg, rgba(37,99,235,.04) 0%, transparent 100%);
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.modes-header { text-align:center; max-width:600px; margin:0 auto 52px; }
+.modes-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:1100px; margin:0 auto; }
+.mode-card {
+  border:1px solid var(--border); border-radius:var(--radius); padding:36px;
+}
+.mode-card.simple { background:rgba(255,255,255,.03); }
+.mode-card.expert { background:rgba(37,99,235,.06); border-color:rgba(37,99,235,.2); }
+.mode-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 12px; border-radius:99px;
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:20px;
+}
+.mode-badge.s { background:rgba(255,255,255,.06); color:var(--light); }
+.mode-badge.e { background:rgba(37,99,235,.15); color:var(--blue3); }
+.mode-badge svg { fill:none; stroke:currentColor; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+.mode-title { font-size:22px; font-weight:700; margin-bottom:12px; }
+.mode-desc  { font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
+.mode-items { display:flex; flex-direction:column; gap:10px; }
+.mode-item  { display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--light); }
+.mode-item svg { stroke:var(--blue2); fill:none; width:15px; height:15px; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════════
+   §4 ARTICLES
+   ═══════════════════════════════════════════════ */
+#articles { padding:100px 5vw; }
+.articles-header { text-align:center; max-width:500px; margin:0 auto 56px; }
+.articles-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:1100px; margin:0 auto; }
+.article-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:26px;
+  display:flex; flex-direction:column; gap:12px;
+  transition:border-color .2s, transform .2s, box-shadow .2s; cursor:pointer;
+}
+.article-card:hover { border-color:var(--border2); transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,.3); }
+.article-card:hover .article-title { color:var(--blue2); }
+.article-tag {
+  display:inline-flex; padding:3px 11px; border-radius:99px;
+  font-family:var(--mono); font-size:11px;
+  background:rgba(255,255,255,.04); border:1px solid var(--border2);
+  color:var(--muted); width:fit-content; letter-spacing:.3px;
+}
+.article-title { font-size:16px; font-weight:600; line-height:1.4; transition:color .18s; }
+.article-desc  { font-size:13.5px; color:var(--muted); line-height:1.65; flex:1; }
+.article-meta  { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:7px; }
+.article-link  {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:13px; font-weight:500; color:var(--blue2);
+  width:fit-content; transition:gap .2s;
+}
+.article-link:hover { gap:10px; text-decoration:none; color:var(--blue3); }
+.article-link svg { stroke:currentColor; fill:none; width:14px; height:14px; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ═══════════════════════════════════════════════
+   §5 VERSIONS
+   ═══════════════════════════════════════════════ */
+#versions { padding:100px 5vw; border-top:1px solid var(--border); }
+.versions-header { text-align:center; max-width:500px; margin:0 auto 56px; }
+.versions-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; max-width:1000px; margin:0 auto; }
+.version-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:32px;
+  display:flex; flex-direction:column; gap:18px;
+  transition:border-color .2s, transform .2s;
+}
+.version-card:hover { border-color:rgba(37,99,235,.3); transform:translateY(-2px); }
+.version-head { display:flex; align-items:center; gap:16px; }
+.version-icon {
+  width:48px; height:48px; border-radius:12px;
+  background:rgba(37,99,235,.1); border:1px solid rgba(37,99,235,.2);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.version-icon svg { stroke:var(--blue2); fill:none; width:22px; height:22px; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.version-name { font-size:18px; font-weight:700; }
+.version-tag {
+  font-size:11px; font-weight:600; padding:2px 10px; border-radius:99px;
+  background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.2); color:#4ade80;
+}
+.version-specs { display:flex; flex-direction:column; gap:8px; }
+.version-spec { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
+.version-spec svg { stroke:var(--muted); fill:none; width:13px; height:13px; stroke-width:2; flex-shrink:0; }
+.version-dl {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 20px; border-radius:9px;
+  background:rgba(37,99,235,.1); border:1px solid rgba(37,99,235,.2);
+  font-size:13.5px; font-weight:600; color:var(--blue3);
+  width:fit-content; transition:all .2s;
+}
+.version-dl:hover { background:rgba(37,99,235,.18); text-decoration:none; }
+.version-dl svg { stroke:var(--blue3); fill:none; width:15px; height:15px; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ═══════════════════════════════════════════════
+   §6 CONFIDENTIALITÉ
+   ═══════════════════════════════════════════════ */
+#privacy { padding:0 5vw 80px; }
+.privacy-bar {
+  max-width:1100px; margin:0 auto;
+  background:rgba(37,99,235,.06); border:1px solid rgba(37,99,235,.15);
+  border-radius:var(--radius); padding:24px 32px;
+  display:flex; align-items:center; gap:20px;
+}
+.privacy-icon {
+  width:44px; height:44px; border-radius:12px;
+  background:rgba(37,99,235,.1); border:1px solid rgba(37,99,235,.18);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.privacy-icon svg { stroke:var(--blue2); fill:none; width:20px; height:20px; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.privacy-text strong { display:block; font-size:14px; font-weight:600; margin-bottom:4px; }
+.privacy-text span { font-size:13px; color:var(--muted); }
+
+/* ═══════════════════════════════════════════════
+   §7 FOOTER
+   ═══════════════════════════════════════════════ */
+footer {
+  border-top:1px solid var(--border);
+  padding:52px 5vw 32px;
+}
+.footer-inner { max-width:1100px; margin:0 auto; }
+.footer-top {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:48px; margin-bottom:48px;
+}
+.footer-brand p { font-size:13.5px; color:var(--muted); line-height:1.7; margin-top:12px; max-width:300px; }
+.footer-col h4 {
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  text-transform:uppercase; letter-spacing:1.2px; color:var(--muted);
+  margin-bottom:16px;
+}
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-col ul li a { font-size:13.5px; color:var(--light); transition:color .18s; }
+.footer-col ul li a:hover { color:var(--text); text-decoration:none; }
+.footer-soc { display:flex; gap:10px; margin-top:16px; }
+.soc-btn {
+  width:36px; height:36px; border-radius:9px;
+  background:var(--card); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  transition:all .18s;
+}
+.soc-btn:hover { border-color:var(--border2); background:var(--card2); }
+.soc-btn svg { stroke:var(--light); fill:none; width:16px; height:16px; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.footer-soc .soc-btn:hover svg { stroke:var(--text); }
+.footer-bottom {
+  border-top:1px solid var(--border); padding-top:24px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+}
+.footer-copy { font-size:12.5px; color:var(--muted); }
+.footer-legal { display:flex; gap:22px; }
+.footer-legal a { font-size:12.5px; color:var(--muted); transition:color .18s; }
+.footer-legal a:hover { color:var(--light); text-decoration:none; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media(max-width:960px) {
+  .nav-links { display:none; }
+  .features-grid, .articles-grid { grid-template-columns:1fr 1fr; }
+  .modes-grid, .versions-grid { grid-template-columns:1fr; }
+  .stats-bar { grid-template-columns:1fr 1fr; }
+  .footer-top { grid-template-columns:1fr 1fr; }
+  .dm-grid { grid-template-columns:1fr 1fr 1fr; }
+}
+@media(max-width:640px) {
+  .features-grid, .articles-grid { grid-template-columns:1fr; }
+  .stats-bar { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr; }
+  .hero-actions { flex-direction:column; align-items:center; }
+  #hero h1 { font-size:38px; }
+  .dm-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<!-- © 2026 Shams Guettaf. Tous droits réservés. -->
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <div class="nav-logo">
+    <a href="#hero" class="nav-logo-mark">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </a>
+    <span class="nav-brand">SENTINEL</span>
+    <span class="nav-ver" id="nav-ver">v3.28</span>
+  </div>
+  <div class="nav-links">
+    <a href="#hero"     data-s="hero">Accueil</a>
+    <a href="#features" data-s="features">Fonctionnalités</a>
+    <a href="#modes"    data-s="modes">Modes</a>
+    <a href="#articles" data-s="articles">Articles</a>
+    <a href="#versions" data-s="versions">Versions</a>
+  </div>
+  <div class="nav-cta">
+    <a href="https://github.com/shamsetdean/sentinel" class="btn btn-ghost" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+    <a href="#versions" class="btn btn-primary">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Télécharger
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════ §1 HERO ═══════════ -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-label reveal">
+    <span class="hero-label-dot"></span>
+    Version <span id="hero-ver">3.28</span> — Multi-plateforme
+  </div>
+  <h1 class="reveal">Diagnostic système<br><span>clair et complet</span></h1>
+  <p class="hero-sub reveal">SENTINEL analyse votre ordinateur et génère un rapport HTML détaillé. Sécurité, performance, batterie, stockage — tout en local, aucune donnée transmise.</p>
+  <div class="platforms reveal">
+    <div class="platform-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>macOS Intel
+    </div>
+    <div class="platform-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>macOS Apple Silicon
+    </div>
+    <div class="platform-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Windows 10 / 11
+    </div>
+    <div class="platform-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Linux
+    </div>
+  </div>
+  <div class="hero-actions reveal">
+    <a href="#versions" class="btn btn-primary btn-lg">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Télécharger SENTINEL
+    </a>
+    <a href="#modes" class="btn btn-ghost btn-lg">Voir les modes</a>
+  </div>
+
+  <!-- Mockup rapport -->
+  <div class="mockup-wrap reveal">
+    <div class="mockup-chrome">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="mockup-url">Sentinel_2026-03-28_rapport.html</span>
+    </div>
+    <div class="mode-tabs">
+      <div class="mode-tab active" onclick="switchTab(this,'pane-simple')">Mode Simple</div>
+      <div class="mode-tab" onclick="switchTab(this,'pane-expert')">Mode Expert</div>
+    </div>
+    <!-- MODE SIMPLE -->
+    <div id="pane-simple" class="mode-pane active">
+      <div class="dash-mock">
+        <div class="dm-alert">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <strong>Alerte :&nbsp;</strong><span>Verrouillage écran désactivé — Réglages Système &rsaquo; Économiseur d'écran</span>
+        </div>
+        <div class="dm-grid">
+          <div class="dm-score">
+            <div class="dm-ring">
+              <svg width="68" height="68" viewBox="0 0 68 68">
+                <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="5"/>
+                <circle cx="34" cy="34" r="28" fill="none" stroke="#2563eb" stroke-width="5"
+                  stroke-dasharray="176" stroke-dashoffset="26" stroke-linecap="round"/>
+              </svg>
+              <div class="dm-ring-center"><div class="dm-ring-n">85</div><div class="dm-ring-l">/100</div></div>
+            </div>
+            <div class="dm-score-info">
+              <h4>Score : Excellent</h4>
+              <p>Mac en bonne forme. 1 point à corriger.</p>
+              <div class="dm-chips">
+                <span class="dm-chip chip-b">Sécu 88</span>
+                <span class="dm-chip chip-g">Batt 86</span>
+                <span class="dm-chip chip-o">1 alerte</span>
+              </div>
+            </div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-card-name">Sécurité</div>
+            <div class="dm-card-val" style="color:var(--blue3)">88</div>
+            <div class="dm-card-sub">1 problème</div>
+            <div class="dm-bar"><div class="dm-fill" style="width:88%;background:var(--blue)"></div></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-card-name">Batterie</div>
+            <div class="dm-card-val" style="color:var(--green)">78%</div>
+            <div class="dm-card-sub">147 cycles · 3h 42</div>
+            <div class="dm-bar"><div class="dm-fill" style="width:78%;background:var(--green)"></div></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-card-name">Stockage</div>
+            <div class="dm-card-val">56%</div>
+            <div class="dm-card-sub">225 Go libres</div>
+            <div class="dm-bar"><div class="dm-fill" style="width:56%;background:var(--orange)"></div></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-card-name">Performance</div>
+            <div class="dm-card-val" style="color:var(--blue3)">92</div>
+            <div class="dm-card-sub">M3 Pro · 52°C</div>
+            <div class="dm-bar"><div class="dm-fill" style="width:92%;background:var(--blue)"></div></div>
+          </div>
+          <div class="dm-card">
+            <div class="dm-card-name">Connexion</div>
+            <div class="dm-card-val" style="color:var(--green);font-size:16px">WPA2</div>
+            <div class="dm-card-sub">5 GHz · −54 dBm</div>
+            <div class="dm-bar"><div class="dm-fill" style="width:75%;background:var(--green)"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MODE EXPERT -->
+    <div id="pane-expert" class="mode-pane">
+      <div class="dash-mock dm-expert">
+        <table>
+          <thead><tr><th>Module</th><th>Indicateur</th><th>Valeur</th></tr></thead>
+          <tbody>
+            <tr><td>Système</td><td>Modèle</td><td>MacBook Pro 14-inch, 2023</td></tr>
+            <tr><td>Système</td><td>Processeur</td><td>Apple M3 Pro — 12 cœurs</td></tr>
+            <tr><td>Système</td><td>RAM</td><td>18 Go LPDDR5 6400 MHz</td></tr>
+            <tr><td>Thermique</td><td>Température CPU</td><td class="v-g">52.3 °C</td></tr>
+            <tr><td>Thermique</td><td>Température GPU</td><td class="v-g">48.1 °C</td></tr>
+            <tr><td>Batterie</td><td>Cycles</td><td>147 / 1000</td></tr>
+            <tr><td>Batterie</td><td>Capacité restante</td><td>96% de l'origine</td></tr>
+            <tr><td>Batterie</td><td>Tension / Courant</td><td>12.4 V · −2 100 mA</td></tr>
+            <tr><td>Sécurité</td><td>FileVault</td><td class="v-g">Actif — AES-XTS 256 bits</td></tr>
+            <tr><td>Sécurité</td><td>Verrouillage écran</td><td class="v-r">Désactivé</td></tr>
+            <tr><td>Sécurité</td><td>Secure Boot</td><td class="v-g">Full Security</td></tr>
+            <tr><td>Réseau</td><td>SSID</td><td>FreeWifi_Secure · WPA2 · 5 GHz</td></tr>
+            <tr><td>Réseau</td><td>Débit WiFi</td><td>877 Mbps</td></tr>
+            <tr><td>Stockage</td><td>SMART</td><td class="v-g">Verified</td></tr>
+            <tr><td>Stockage</td><td>Débit lecture</td><td>2 800 Mo/s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar reveal-stagger">
+    <div class="stat"><div class="stat-val">240+</div><div class="stat-label">Métriques collectées</div></div>
+    <div class="stat"><div class="stat-val">4</div><div class="stat-label">Plateformes supportées</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Données transmises</div></div>
+    <div class="stat"><div class="stat-val" id="stat-ver">3.28</div><div class="stat-label">Version actuelle</div></div>
+  </div>
+</section>
+
+<!-- ═══════════ §2 FONCTIONNALITÉS ═══════════ -->
+<section id="features">
+  <div class="features-header reveal">
+    <div class="section-label">Fonctionnalités</div>
+    <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+    <p class="section-sub">Un diagnostic complet, présenté selon votre niveau.</p>
+  </div>
+  <div class="features-grid reveal-stagger">
+    <div class="feature-card">
+      <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="feature-title">Audit de sécurité</div>
+      <div class="feature-desc">Gatekeeper, SIP, FileVault, pare-feu, Secure Boot, SSH et permissions applications. Score sur 100 avec actions correctives.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="feature-title">Performance et chaleur</div>
+      <div class="feature-desc">CPU, GPU, RAM, températures internes, consommation énergétique et processus les plus actifs.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M23 7h-1V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2h1V7z"/></svg></div>
+      <div class="feature-title">Santé de la batterie</div>
+      <div class="feature-desc">Cycles, capacité restante, tension, autonomie estimée et état de l'adaptateur secteur.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
+      <div class="feature-title">Stockage et doublons</div>
+      <div class="feature-desc">Disques SMART, volumes, fichiers volumineux et détection de fichiers en double pour libérer de l'espace.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M1.5 8.5a13 13 0 0 1 21 0M5 12a9 9 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01"/></svg></div>
+      <div class="feature-title">Analyse réseau</div>
+      <div class="feature-desc">WiFi, IP, DNS, VPN, appareils connectés, connexions actives et score de sécurité du réseau.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+      <div class="feature-title">Applications et périphériques</div>
+      <div class="feature-desc">Applications installées, versions, droits d'accès caméra/micro, USB, Thunderbolt, Bluetooth et LaunchAgents.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ §3 MODES ═══════════ -->
+<section id="modes">
+  <div class="modes-header reveal">
+    <div class="section-label">Deux modes d'affichage</div>
+    <h2 class="section-title">Pour tous les profils</h2>
+    <p class="section-sub" style="margin:0 auto">Simple pour les débutants, Expert pour les professionnels. Basculez en un clic, préférence mémorisée.</p>
+  </div>
+  <div class="modes-grid">
+    <div class="mode-card simple reveal">
+      <div class="mode-badge s">
+        <svg width="11" height="11" viewBox="0 0 24 24"><path d="M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Mode Simple
+      </div>
+      <h3 class="mode-title">Vue d'ensemble claire</h3>
+      <p class="mode-desc">Conçu pour les utilisateurs non-techniques. Chaque information est traduite en langage courant avec un verdict coloré vert / orange / rouge.</p>
+      <div class="mode-items">
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Cartes compactes avec verdict immédiat</div>
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Score global et alertes urgentes en tête</div>
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Actions correctives en un clic</div>
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Sections fermées par défaut — lecture 30s</div>
+      </div>
+    </div>
+    <div class="mode-card expert reveal">
+      <div class="mode-badge e">
+        <svg width="11" height="11" viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        Mode Expert
+      </div>
+      <h3 class="mode-title">Données techniques complètes</h3>
+      <p class="mode-desc">Toutes les métriques détaillées pour les utilisateurs avancés, administrateurs système et professionnels IT.</p>
+      <div class="mode-items">
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>240+ métriques : températures, tensions, IOPS, SMART</div>
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Sections ouvertes par défaut avec navigation rapide</div>
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Radar d'alertes classé par criticité</div>
+        <div class="mode-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Commandes Terminal et guide de correction intégrés</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ §4 ARTICLES ═══════════ -->
+<section id="articles">
+  <div class="articles-header reveal">
+    <div class="section-label">Articles</div>
+    <h2 class="section-title">Guides et tutoriels</h2>
+    <p class="section-sub" style="margin:0 auto">Sécurité, batterie, stockage, performance — expliqués clairement.</p>
+  </div>
+  <div class="articles-grid reveal-stagger">
+    <div class="article-card">
+      <span class="article-tag">Sécurité</span>
+      <div class="article-title">Les 8 protections essentielles de macOS en 2026</div>
+      <div class="article-desc">FileVault, Gatekeeper, SIP, pare-feu : comment s'assurer que votre Mac est correctement protégé contre les menaces actuelles.</div>
+      <div class="article-meta"><span>27 mars 2026</span><span>·</span><span>5 min</span></div>
+      <a href="#" class="article-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+    </div>
+    <div class="article-card">
+      <span class="article-tag">Batterie</span>
+      <div class="article-title">Comprendre les cycles de batterie sur Mac</div>
+      <div class="article-desc">Un cycle, c'est quoi ? Comment interpréter la capacité restante et savoir quand remplacer sa batterie.</div>
+      <div class="article-meta"><span>26 mars 2026</span><span>·</span><span>4 min</span></div>
+      <a href="#" class="article-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+    </div>
+    <div class="article-card">
+      <span class="article-tag">Stockage</span>
+      <div class="article-title">Comment SENTINEL détecte les fichiers en double</div>
+      <div class="article-desc">Algorithme MD5 rapide, fichiers de plus de 1 Mo, liens Finder directs : le module de détection expliqué.</div>
+      <div class="article-meta"><span>25 mars 2026</span><span>·</span><span>3 min</span></div>
+      <a href="#" class="article-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+    </div>
+    <div class="article-card">
+      <span class="article-tag">Interface</span>
+      <div class="article-title">Mode Simple vs Mode Expert : lequel choisir ?</div>
+      <div class="article-desc">Le Mode Simple traduit les données en verdicts colorés. Le Mode Expert affiche toutes les métriques brutes pour les professionnels.</div>
+      <div class="article-meta"><span>24 mars 2026</span><span>·</span><span>3 min</span></div>
+      <a href="#" class="article-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+    </div>
+    <div class="article-card">
+      <span class="article-tag">Windows</span>
+      <div class="article-title">SENTINEL sur Windows — BitLocker, Defender, TPM</div>
+      <div class="article-desc">PowerShell, WMI, BitLocker, Defender, TPM, Secure Boot UEFI — ce que la version Windows analyse en détail.</div>
+      <div class="article-meta"><span>23 mars 2026</span><span>·</span><span>4 min</span></div>
+      <a href="#" class="article-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+    </div>
+    <div class="article-card">
+      <span class="article-tag">Linux</span>
+      <div class="article-title">SENTINEL sur Linux — /proc, lsblk, nmcli</div>
+      <div class="article-desc">Comment la version Linux collecte les données via le système de fichiers virtuel /proc et les outils natifs.</div>
+      <div class="article-meta"><span>22 mars 2026</span><span>·</span><span>4 min</span></div>
+      <a href="#" class="article-link">Lire l'article <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ §5 VERSIONS ═══════════ -->
+<section id="versions">
+  <div class="versions-header reveal">
+    <div class="section-label">Versions disponibles</div>
+    <h2 class="section-title">Votre plateforme</h2>
+    <p class="section-sub" style="margin:0 auto">Compatible macOS, Windows et Linux. Choisissez votre version.</p>
+  </div>
+  <div class="versions-grid reveal-stagger">
+    <div class="version-card">
+      <div class="version-head">
+        <div class="version-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="version-name">macOS Intel</div>
+            <div class="version-tag">Stable</div>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:3px">Mac Intel x86_64 — 2017 à 2020</div>
+        </div>
+      </div>
+      <div class="version-specs">
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Application .app + launcher bash</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Python 3.9+ requis</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>macOS Ventura 13+ recommandé</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Guide d'installation illustré inclus</div>
+      </div>
+      <a href="#" class="version-dl">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        SENTINEL_Intel.zip
+      </a>
+    </div>
+    <div class="version-card">
+      <div class="version-head">
+        <div class="version-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="version-name">macOS Apple Silicon</div>
+            <div class="version-tag">Stable</div>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:3px">M1 / M2 / M3 / M4 — 2020 et après</div>
+        </div>
+      </div>
+      <div class="version-specs">
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Application .app + launcher zsh</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Optimisé pour puce Apple Silicon</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Capteurs thermiques M-series</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>PATH Homebrew ARM intégré</div>
+      </div>
+      <a href="#" class="version-dl">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        SENTINEL_Silicon.zip
+      </a>
+    </div>
+    <div class="version-card">
+      <div class="version-head">
+        <div class="version-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="version-name">Windows</div>
+            <div class="version-tag">Stable</div>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:3px">Windows 10 / 11 — x64</div>
+        </div>
+      </div>
+      <div class="version-specs">
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Launcher SENTINEL.bat (double-clic)</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>PowerShell / WMI / Registre Windows</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>BitLocker, Defender, TPM, UAC</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Python 3.9+ requis (python.org)</div>
+      </div>
+      <a href="#" class="version-dl">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        SENTINEL_Windows.zip
+      </a>
+    </div>
+    <div class="version-card">
+      <div class="version-head">
+        <div class="version-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="version-name">Linux</div>
+            <div class="version-tag">Stable</div>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:3px">Ubuntu 20.04+ / Debian 11+ / Fedora 36+</div>
+        </div>
+      </div>
+      <div class="version-specs">
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Script sentinel.sh + .desktop launcher</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>/proc/, lsblk, nmcli, ss, df</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>LUKS, AppArmor / SELinux, ClamAV</div>
+        <div class="version-spec"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Snap, Flatpak, dpkg, rpm supportés</div>
+      </div>
+      <a href="#" class="version-dl">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        SENTINEL_Linux.zip
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ §6 CONFIDENTIALITÉ ═══════════ -->
+<section id="privacy">
+  <div class="privacy-bar reveal">
+    <div class="privacy-icon">
+      <svg viewBox="0 0 24 24"><path d="M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="privacy-text">
+      <strong>100% local — aucune donnée transmise</strong>
+      <span>SENTINEL n'envoie aucune information à un serveur externe. Toutes les analyses sont effectuées sur votre ordinateur. Le rapport HTML reste sur votre machine. Votre mot de passe n'est jamais stocké.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ §7 FOOTER ═══════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <a href="#hero" class="nav-logo-mark">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </a>
+          <span class="nav-brand">SENTINEL</span>
+        </div>
+        <p>Application de diagnostic système multi-plateforme. Rapport HTML 100% local. Modes Simple et Expert.</p>
+        <div class="footer-soc">
+          <a href="https://www.linkedin.com/in/shamsguettaf/" class="soc-btn" target="_blank" title="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://x.com/shamsetdean" class="soc-btn" target="_blank" title="X">
+            <svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M4 4l16 16M20 4L4 20"/></svg>
+          </a>
+          <a href="https://github.com/shamsetdean/sentinel" class="soc-btn" target="_blank" title="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+          <a href="https://abstracted-crush-f4e.notion.site/SHAMS-DEAN-286d3f1e5597815f9fdfc90d48445621" class="soc-btn" target="_blank" title="Notion">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Sections</h4>
+        <ul>
+          <li><a href="#hero">Accueil</a></li>
+          <li><a href="#features">Fonctionnalités</a></li>
+          <li><a href="#modes">Modes</a></li>
+          <li><a href="#articles">Articles</a></li>
+          <li><a href="#versions">Versions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Versions</h4>
+        <ul>
+          <li><a href="#">macOS Intel</a></li>
+          <li><a href="#">macOS Silicon</a></li>
+          <li><a href="#">Windows 10/11</a></li>
+          <li><a href="#">Linux</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="LEGAL.md">Mentions légales</a></li>
+          <li><a href="LICENSE">Licence</a></li>
+          <li><a href="PRIVACY.md">Confidentialité</a></li>
+          <li><a href="https://github.com/shamsetdean/sentinel">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Shams Guettaf — SHAMS&amp;DEAN. Tous droits réservés. Version <span id="footer-ver">3.28</span></span>
+      <div class="footer-legal">
+        <a href="LICENSE">Licence</a>
+        <a href="LEGAL.md">Mentions légales</a>
+        <a href="PRIVACY.md">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// © 2026 Shams Guettaf. Tous droits réservés.
+
+/* Version auto M.J */
+(function(){
+  var d=new Date(), v=(d.getMonth()+1)+'.'+d.getDate();
+  ['nav-ver','hero-ver','stat-ver','footer-ver'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el) return;
+    el.textContent = id==='nav-ver' ? 'v'+v : v;
+  });
+  document.title='SENTINEL v'+v+' — protect · clean · control';
+})();
+
+/* Switch onglets mockup */
+function switchTab(tab,paneId){
+  document.querySelectorAll('.mode-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.mode-pane').forEach(function(p){p.classList.remove('active');});
+  tab.classList.add('active');
+  var pane=document.getElementById(paneId);
+  if(pane) pane.classList.add('active');
+}
+
+/* Nav active section */
+(function(){
+  var links=document.querySelectorAll('.nav-links a[data-s]');
+  var sections=[];
+  links.forEach(function(a){
+    var el=document.getElementById(a.dataset.s);
+    if(el) sections.push({el:el,a:a});
+  });
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY+80;
+    var cur=null;
+    sections.forEach(function(s){
+      if(s.el.offsetTop<=y) cur=s;
+    });
+    links.forEach(function(a){a.classList.remove('active');});
+    if(cur) cur.a.classList.add('active');
+  },{passive:true});
+})();
+
+/* Scroll reveal */
+(function(){
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) e.target.classList.add('visible');
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal,.reveal-stagger').forEach(function(el){
+    io.observe(el);
+  });
+})();
+</script>
+</body>
+</html>
