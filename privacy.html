@@ -7,8 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="SENTINEL — Mentions légales">
-<title>Mentions légales — SENTINEL {{VER}}</title>
+<meta name="description" content="SENTINEL — Politique de confidentialité">
+<title>Politique de confidentialité — SENTINEL {{VER}}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -165,66 +165,78 @@ footer{border-top:1px solid var(--border);padding:52px 5vw 32px;position:relativ
 </nav>
 <main class="page-wrap">
   <div class="reveal">
-    <div class="page-eyebrow">Légal</div>
-    <h1 class="page-title">Mentions légales</h1>
-    <p class="page-sub">Informations légales relatives à l'application SENTINEL et à son utilisation. Conformes à la législation française et au droit européen.</p>
+    <div class="page-eyebrow">Confidentialité & RGPD</div>
+    <h1 class="page-title">Politique de confidentialité</h1>
+    <p class="page-sub">SENTINEL est conçu avec une approche privacy by design : aucune donnée personnelle n'est collectée, transmise ou stockée. Conforme au RGPD.</p>
   </div>
   <div class="prose reveal">
 
     <div class="info-box">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 10 0v4"/></svg>
       <div class="info-box-txt">
-        <strong>Informations légales</strong>
-        <span>Ces mentions légales régissent l'utilisation du site internet et de l'application SENTINEL, conformément à la législation française et européenne.</span>
+        <strong>SENTINEL ne collecte aucune donnée personnelle</strong>
+        <span>Toutes les analyses sont effectuées localement sur votre appareil. Aucune information n'est transmise à un serveur externe. Aucune télémétrie, aucun tracking.</span>
       </div>
     </div>
 
-    <h2>1. Éditeur du site</h2>
-    <p><strong>Responsable de publication :</strong> Shams Guettaf — SHAMS&amp;DEAN</p>
-    <p><strong>Contact :</strong> <a href="mailto:shamsetdean@gmail.com">shamsetdean@gmail.com</a></p>
-    <p><strong>GitHub :</strong> <a href="https://github.com/shamsetdean/sentinel" target="_blank">github.com/shamsetdean/sentinel</a></p>
+    <h2>1. Responsable du traitement</h2>
+    <p><strong>Shams Guettaf — SHAMS&amp;DEAN</strong><br>
+    Contact DPO : <a href="mailto:shamsetdean@gmail.com">shamsetdean@gmail.com</a></p>
 
-    <h2>2. Propriété intellectuelle</h2>
-    <p>L'application SENTINEL, son code source, son interface utilisateur, sa documentation et son rapport HTML généré constituent des œuvres de l'esprit protégées par le <strong>Code de la propriété intellectuelle</strong> (articles L.111-1 et suivants).</p>
-    <p>SHAMS&amp;DEAN est l'auteur et titulaire exclusif de l'ensemble des droits patrimoniaux et moraux afférents à ces œuvres. Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie de ces éléments, quel que soit le moyen ou le procédé utilisé, est formellement interdite sans l'autorisation écrite préalable de SHAMS&amp;DEAN.</p>
-    <p>Toute violation de ces droits pourra donner lieu à des poursuites judiciaires sur le fondement des articles L.335-2 et suivants du Code de la propriété intellectuelle (contrefaçon de logiciel).</p>
+    <h2>2. Données collectées</h2>
+    <p>SENTINEL analyse les données système de votre ordinateur <strong>uniquement en local</strong>. Ces données ne constituent pas des données à caractère personnel au sens du RGPD. Elles restent exclusivement sur votre machine.</p>
+    <p>Les informations analysées incluent :</p>
+    <ul>
+      <li>Caractéristiques matérielles (modèle, processeur, mémoire, GPU)</li>
+      <li>État du stockage et des disques (capacité, SMART, fichiers)</li>
+      <li>Configuration réseau locale (IP locale, WiFi, DNS)</li>
+      <li>État de la batterie (cycles, capacité, tension)</li>
+      <li>Paramètres de sécurité système (pare-feu, chiffrement, mises à jour)</li>
+      <li>Liste des applications installées et processus actifs</li>
+    </ul>
 
-    <h2>3. Limitation de responsabilité</h2>
+    <h2>3. Absence de transmission</h2>
+    <p>SENTINEL <strong>ne contacte aucun serveur externe</strong> pendant ou après l'analyse. En particulier :</p>
+    <ul>
+      <li>Aucune API de géolocalisation ou d'identification IP n'est sollicitée ;</li>
+      <li>Aucun rapport n'est transmis à SHAMS&amp;DEAN ou à un tiers ;</li>
+      <li>Aucune télémétrie d'usage, analytics ou tracking n'est intégré ;</li>
+      <li>Le rapport HTML généré est sauvegardé uniquement sur votre Bureau ;</li>
+      <li>Le mot de passe administrateur, lorsqu'il est requis, est utilisé en mémoire vive et n'est jamais persisté sur disque.</li>
+    </ul>
+
+    <h2>4. Rapport HTML généré</h2>
+    <p>Le rapport HTML produit par SENTINEL peut contenir des informations sur votre système (modèle, numéro de série partiel, liste des applications). Ce rapport est la <strong>propriété exclusive de l'utilisateur</strong>. SHAMS&amp;DEAN n'y accède à aucun moment.</p>
     <div class="warn-box">
       <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <div class="warn-box-txt">
-        <strong>Clause de non-responsabilité</strong>
-        <span>SENTINEL est fourni «&nbsp;en l'état&nbsp;» à titre informatif. SHAMS&amp;DEAN ne saurait être tenu responsable des décisions prises sur la base des informations contenues dans un rapport généré par l'application.</span>
+        <strong>Avertissement</strong>
+        <span>Ne partagez pas votre rapport SENTINEL publiquement, car il contient des informations sensibles sur la configuration de votre système.</span>
       </div>
     </div>
-    <p>Les informations collectées par SENTINEL sont issues des API système natives du système d'exploitation de l'utilisateur. Leur exactitude dépend du bon fonctionnement de ces API. SHAMS&amp;DEAN ne garantit pas l'exactitude, l'exhaustivité ou l'actualité de ces informations.</p>
-    <p>SHAMS&amp;DEAN décline toute responsabilité en cas de :</p>
+
+    <h2>5. Cookies et traceurs</h2>
+    <p>L'application SENTINEL et son rapport HTML n'utilisent <strong>aucun cookie</strong>, aucun traceur (pixel de tracking, beacon) et aucune technologie de fingerprinting. Le site internet de présentation utilise uniquement les cookies nécessaires à son fonctionnement (pas de cookies analytiques ou publicitaires).</p>
+
+    <h2>6. Droits des utilisateurs (RGPD)</h2>
+    <p>Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi Informatique et Libertés du 6 janvier 1978 modifiée, vous bénéficiez des droits suivants :</p>
     <ul>
-      <li>Perte de données résultant de l'utilisation ou de l'impossibilité d'utiliser l'application ;</li>
-      <li>Dommages directs ou indirects causés par un usage incorrect ou non conforme à la documentation ;</li>
-      <li>Incompatibilité entre l'application et la configuration matérielle ou logicielle de l'utilisateur ;</li>
-      <li>Toute décision prise sur la base des diagnostics fournis par l'application.</li>
+      <li><strong>Droit d'accès</strong> : accéder aux informations vous concernant ;</li>
+      <li><strong>Droit de rectification</strong> : corriger des informations inexactes ;</li>
+      <li><strong>Droit à l'effacement</strong> : supprimer les informations vous concernant ;</li>
+      <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré ;</li>
+      <li><strong>Droit d'opposition</strong> : vous opposer au traitement de vos données.</li>
     </ul>
+    <p>Dans la mesure où SENTINEL ne collecte aucune donnée personnelle, ces droits s'exercent de facto : il n'existe aucune donnée à caractère personnel stockée par SHAMS&amp;DEAN vous concernant. Pour toute question, contactez : <a href="mailto:shamsetdean@gmail.com">shamsetdean@gmail.com</a></p>
 
-    <h2>4. Conditions générales d'utilisation</h2>
-    <h3>4.1 Accès et utilisation</h3>
-    <p>L'utilisation de SENTINEL implique l'acceptation pleine et entière des présentes mentions légales. SHAMS&amp;DEAN se réserve le droit de modifier ces conditions à tout moment, sans préavis.</p>
-    <h3>4.2 Usage commercial</h3>
-    <p>Tout usage commercial de SENTINEL — intégration dans un service tiers, revente, distribution à des clients — nécessite une autorisation écrite préalable de SHAMS&amp;DEAN. Pour toute demande de licence commerciale, contactez : <a href="mailto:shamsetdean@gmail.com">shamsetdean@gmail.com</a></p>
-    <h3>4.3 Comportements interdits</h3>
-    <ul>
-      <li>Décompilation, rétro-ingénierie ou désassemblage du code source ;</li>
-      <li>Modification ou suppression des mentions de droits d'auteur ;</li>
-      <li>Distribution ou redistribution sans autorisation ;</li>
-      <li>Utilisation à des fins illicites ou contraires à l'ordre public.</li>
-    </ul>
+    <h2>7. Sécurité</h2>
+    <p>SENTINEL a été conçu avec une approche <em>privacy by design</em> : l'absence totale de transmission de données constitue la garantie principale de sécurité. Le code source est disponible pour audit sur <a href="https://github.com/shamsetdean/sentinel" target="_blank">GitHub</a>.</p>
 
-    <h2>5. Droit applicable et juridiction</h2>
-    <p>Les présentes mentions légales sont régies par le droit français. En cas de litige, les parties s'engagent à rechercher une solution amiable avant tout recours judiciaire. À défaut, les tribunaux français seront seuls compétents.</p>
+    <h2>8. Évolutions de cette politique</h2>
+    <p>SHAMS&amp;DEAN se réserve le droit de modifier cette politique de confidentialité à tout moment. La version en vigueur est celle accessible sur ce site. La date de mise à jour correspond à la version affichée dans la navigation.</p>
 
-    <h2>6. Contact</h2>
-    <p>Pour toute question relative aux présentes mentions légales : <a href="mailto:shamsetdean@gmail.com">shamsetdean@gmail.com</a></p>
-    <p>GitHub : <a href="https://github.com/shamsetdean/sentinel" target="_blank">github.com/shamsetdean/sentinel</a></p>
+    <h2>9. Autorité de contrôle</h2>
+    <p>En cas de réclamation relative à la protection de vos données, vous pouvez contacter la <a href="https://www.cnil.fr" target="_blank">Commission Nationale de l'Informatique et des Libertés (CNIL)</a>, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07.</p>
 
   </div>
   <div style="margin-top:60px;padding-top:40px;border-top:1px solid var(--border)">
